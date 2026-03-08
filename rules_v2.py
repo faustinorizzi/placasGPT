@@ -53,46 +53,47 @@ def display_section_label(url: str) -> str:
 
 def choose_family(section: str, title: str, description: str) -> str:
     title = (title or "").strip()
+    title_lower = title.lower()
     description = (description or "").strip().lower()
 
     if section == "deportes":
-    sports_b_keywords = [
-        "agenda",
-        "programación",
-        "programacion",
-        "tv",
-        "televisa",
-        "televisado",
-        "transmite",
-        "transmisión",
-        "transmision",
-        "árbitro",
-        "arbitro",
-        "árbitros",
-        "arbitros",
-        "horario",
-        "horarios",
-        "cronograma",
-        "fixture",
-        "fecha",
-        "fechas",
-        "hora",
-        "horas",
-        "día",
-        "dias",
-        "días",
-        "cuándo",
-        "cuando",
-    ]
+        sports_b_keywords = [
+            "agenda",
+            "programación",
+            "programacion",
+            "tv",
+            "televisa",
+            "televisado",
+            "transmite",
+            "transmisión",
+            "transmision",
+            "árbitro",
+            "arbitro",
+            "árbitros",
+            "arbitros",
+            "horario",
+            "horarios",
+            "cronograma",
+            "fixture",
+            "fecha",
+            "fechas",
+            "hora",
+            "horas",
+            "día",
+            "dias",
+            "días",
+            "cuándo",
+            "cuando",
+        ]
 
-    sports_b_patterns = any(
-        k in description or k in title.lower() for k in sports_b_keywords
-    )
+        sports_b_patterns = any(
+            k in description or k in title_lower for k in sports_b_keywords
+        )
 
-    if sports_b_patterns:
-        return "deportes_b"
+        if sports_b_patterns:
+            return "deportes_b"
 
-    return "deportes_a"
+        return "deportes_a"
 
     if section == "policiales":
         return "policiales"
@@ -117,7 +118,7 @@ def choose_family(section: str, title: str, description: str) -> str:
 
     title_long = len(title) >= 95
     desc_present = len(description) >= 80
-    has_keyword = any(k in description or k in title.lower() for k in keywords)
+    has_keyword = any(k in description or k in title_lower for k in keywords)
 
     if (title_long and has_keyword) or (has_keyword and desc_present):
         return "general_b"
