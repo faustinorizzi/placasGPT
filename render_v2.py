@@ -1,6 +1,6 @@
 import base64
 
-RENDER_VERSION = "GA-V2-INNOVATOR-FULL"
+RENDER_VERSION = "GA-V2-INNOVATOR-FULLV2"
 
 def safe_bg_style(image_data: str, overlay_top: str, overlay_bottom: str, fallback_a: str, fallback_b: str) -> str:
     if image_data:
