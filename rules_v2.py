@@ -56,7 +56,43 @@ def choose_family(section: str, title: str, description: str) -> str:
     description = (description or "").strip().lower()
 
     if section == "deportes":
-        return "deportes"
+    sports_b_keywords = [
+        "agenda",
+        "programación",
+        "programacion",
+        "tv",
+        "televisa",
+        "televisado",
+        "transmite",
+        "transmisión",
+        "transmision",
+        "árbitro",
+        "arbitro",
+        "árbitros",
+        "arbitros",
+        "horario",
+        "horarios",
+        "cronograma",
+        "fixture",
+        "fecha",
+        "fechas",
+        "hora",
+        "horas",
+        "día",
+        "dias",
+        "días",
+        "cuándo",
+        "cuando",
+    ]
+
+    sports_b_patterns = any(
+        k in description or k in title.lower() for k in sports_b_keywords
+    )
+
+    if sports_b_patterns:
+        return "deportes_b"
+
+    return "deportes_a"
 
     if section == "policiales":
         return "policiales"
