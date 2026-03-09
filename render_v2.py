@@ -532,19 +532,20 @@ def build_deportes_b(title, description, image_data, section_label_unused, logo_
             bottom: 0;
             height: 590px;
             background: #efede8;
-            padding: 54px 56px 110px 56px;
+            padding: 64px 56px 110px 56px;
             border-top: 16px solid #8FD14F;
           }}
 
           .inner {{
             position: relative;
-            margin-right: 40px;
+            margin-left: 8px;
+            margin-right: 28px;
           }}
 
           .title {{
             font-family: 'Passion One', cursive;
-            font-size: 60px;
-            line-height: 1.02;
+            font-size: 64px;
+            line-height: 0.99;
             color: #111;
           }}
 
@@ -552,7 +553,7 @@ def build_deportes_b(title, description, image_data, section_label_unused, logo_
             display: inline;
             color: #fff;
             background: #8FD14F;
-            padding: 0px 6px 0 6px;
+            padding: 0px 4px 0 4px;
             box-decoration-break: clone;
             -webkit-box-decoration-break: clone;
           }}
