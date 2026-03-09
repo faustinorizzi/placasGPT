@@ -1,4 +1,4 @@
-RENDER_VERSION = "V2-2026-03-08-REBUILD-08"
+RENDER_VERSION = "V2-2026-03-09-REBUILD-09"
 
 
 def safe_bg_style(
@@ -219,8 +219,8 @@ def build_general_a1(title, description, image_data, section_label, logo_data):
                 to bottom,
                 rgba(0, 0, 0, 0.02) 0%,
                 rgba(0, 0, 0, 0.08) 70%,
-                rgba(18, 71, 43, 0.16) 86%,
-                rgba(18, 71, 43, 0.28) 100%
+                rgba(18, 71, 43, 0.18) 86%,
+                rgba(18, 71, 43, 0.30) 100%
               );
             z-index: 5;
           }}
@@ -230,11 +230,12 @@ def build_general_a1(title, description, image_data, section_label, logo_data):
             left: 0;
             right: 0;
             bottom: 0;
-            height: 170px;
+            height: 210px;
             background: linear-gradient(
               to top,
-              rgba(18, 71, 43, 0.34) 0%,
-              rgba(18, 71, 43, 0.14) 42%,
+              rgba(10, 40, 25, 0.82) 0%,
+              rgba(12, 48, 30, 0.54) 40%,
+              rgba(18, 71, 43, 0.18) 78%,
               rgba(18, 71, 43, 0.00) 100%
             );
             z-index: 12;
@@ -284,14 +285,33 @@ def build_general_b(title, description, image_data, section_label, logo_data):
     photo_style = f"background-image: url('{image_data}');" if image_data else ""
     deck_html = f'<div class="deck">{description}</div>' if show_deck(description) else ""
 
+    title_lines = title.count("<br>") + 1 if "<br>" in title else 3
+    if len(title) < 60:
+        title_lines = 2
+    elif len(title) < 100:
+        title_lines = 3
+    else:
+        title_lines = 4
+
+    accent_height_map = {
+        2: "98px",
+        3: "136px",
+        4: "178px",
+    }
+    accent_height = accent_height_map.get(title_lines, "136px")
+    if deck_html and title_lines == 2:
+        accent_height = "128px"
+    elif deck_html and title_lines == 3:
+        accent_height = "162px"
+    elif deck_html and title_lines >= 4:
+        accent_height = "198px"
+
     deck_css = """
           .deck {
             margin-top: 24px;
             margin-right: 0;
           }
     """ if deck_html else ""
-
-    accent_height = "150px" if deck_html else "122px"
 
     return f"""
     <html>
@@ -424,18 +444,8 @@ def build_deportes_a(title, description, image_data, section_label_unused, logo_
 
           .inner {{
             position: relative;
-            margin-left: 28px;
             margin-right: 0;
             z-index: 12;
-          }}
-
-          .accent {{
-            position: absolute;
-            left: -28px;
-            top: 0;
-            bottom: 0;
-            width: 12px;
-            background: #f37021;
           }}
 
           .title {{
@@ -469,7 +479,6 @@ def build_deportes_a(title, description, image_data, section_label_unused, logo_
         <div class="canvas depa">
           <div class="footer-block">
             <div class="inner">
-              <div class="accent"></div>
               <h1 class="title">{title_html}</h1>
             </div>
           </div>
@@ -496,14 +505,31 @@ def build_deportes_b(title, description, image_data, section_label_unused, logo_
                 f'{" ".join(words[3:])}'
             )
 
+    title_lines = 2
+    if len(title) >= 65:
+        title_lines = 3
+    if len(title) >= 110:
+        title_lines = 4
+
+    accent_height_map = {
+        2: "90px",
+        3: "126px",
+        4: "164px",
+    }
+    accent_height = accent_height_map.get(title_lines, "126px")
+    if deck_html and title_lines == 2:
+        accent_height = "120px"
+    elif deck_html and title_lines == 3:
+        accent_height = "154px"
+    elif deck_html and title_lines >= 4:
+        accent_height = "188px"
+
     deck_css = """
           .deck {
             margin-top: 22px;
             margin-right: 0;
           }
     """ if deck_html else ""
-
-    accent_height = "146px" if deck_html else "118px"
 
     return f"""
     <html>
