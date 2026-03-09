@@ -457,13 +457,13 @@ def build_deportes_a(title, description, image_data, section_label_unused, logo_
           }}
 
           .hl-txt {{
-            color: #1A3A5C;
+            color: #6DB33F;
           }}
 
           .hl-bg {{
             display: inline;
             color: #fff;
-            background: #1A3A5C;
+            background: #6DB33F;
             padding: 3px 10px 1px 10px;
             box-decoration-break: clone;
             -webkit-box-decoration-break: clone;
@@ -533,7 +533,7 @@ def build_deportes_b(title, description, image_data, section_label_unused, logo_
             height: 590px;
             background: #efede8;
             padding: 64px 56px 110px 56px;
-            border-top: 16px solid #1A3A5C;
+            border-top: 16px solid #6DB33F;
           }}
 
           .inner {{
@@ -552,7 +552,7 @@ def build_deportes_b(title, description, image_data, section_label_unused, logo_
           .highlight {{
             display: inline;
             color: #fff;
-            background: #1A3A5C;
+            background: #6DB33F;
             padding: 0px 4px 0 4px;
             box-decoration-break: clone;
             -webkit-box-decoration-break: clone;
