@@ -1,4 +1,5 @@
-RENDER_VERSION = "V2-2026-03-08-REBUILD-07"
+RENDER_VERSION = "V2-2026-03-08-REBUILD-08"
+
 
 def safe_bg_style(
     image_data: str,
@@ -60,7 +61,7 @@ def global_styles() -> str:
         font-size: 30px;
         font-weight: 800;
         line-height: 1;
-        letter-spacing: 0.4px;
+        letter-spacing: 0.3px;
         text-transform: uppercase;
       }
 
@@ -147,12 +148,12 @@ def build_general_a(title, description, image_data, section_label, logo_data):
             background:
               linear-gradient(
                 to bottom,
-                rgba(0,0,0,0) 0%,
-                rgba(0,0,0,0) 46%,
-                rgba(0,0,0,0.05) 56%,
-                rgba(17,62,39,0.46) 68%,
-                rgba(18,71,43,0.86) 80%,
-                rgba(18,71,43,0.95) 100%
+                rgba(0, 0, 0, 0) 0%,
+                rgba(0, 0, 0, 0) 46%,
+                rgba(0, 0, 0, 0.05) 56%,
+                rgba(17, 62, 39, 0.46) 68%,
+                rgba(18, 71, 43, 0.86) 80%,
+                rgba(18, 71, 43, 0.95) 100%
               );
             z-index: 5;
           }}
@@ -216,10 +217,10 @@ def build_general_a1(title, description, image_data, section_label, logo_data):
             background:
               linear-gradient(
                 to bottom,
-                rgba(0,0,0,0.02) 0%,
-                rgba(0,0,0,0.08) 70%,
-                rgba(18,71,43,0.22) 86%,
-                rgba(18,71,43,0.38) 100%
+                rgba(0, 0, 0, 0.02) 0%,
+                rgba(0, 0, 0, 0.08) 70%,
+                rgba(18, 71, 43, 0.16) 86%,
+                rgba(18, 71, 43, 0.28) 100%
               );
             z-index: 5;
           }}
@@ -229,12 +230,12 @@ def build_general_a1(title, description, image_data, section_label, logo_data):
             left: 0;
             right: 0;
             bottom: 0;
-            height: 180px;
+            height: 170px;
             background: linear-gradient(
               to top,
-              rgba(18,71,43,0.38) 0%,
-              rgba(18,71,43,0.18) 42%,
-              rgba(18,71,43,0.00) 100%
+              rgba(18, 71, 43, 0.34) 0%,
+              rgba(18, 71, 43, 0.14) 42%,
+              rgba(18, 71, 43, 0.00) 100%
             );
             z-index: 12;
           }}
@@ -245,11 +246,11 @@ def build_general_a1(title, description, image_data, section_label, logo_data):
             right: 54px;
             bottom: 180px;
             background: #f5f2ec;
-            border: 4px solid #2d572c;
+            border: 3px solid #2d572c;
             border-radius: 18px;
-            padding: 34px 34px 30px 34px;
+            padding: 38px 36px 34px 36px;
             z-index: 20;
-            box-shadow: 0 8px 26px rgba(0,0,0,0.18);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
           }}
 
           .title {{
@@ -290,7 +291,7 @@ def build_general_b(title, description, image_data, section_label, logo_data):
           }
     """ if deck_html else ""
 
-    accent_height = "146px" if deck_html else "122px"
+    accent_height = "150px" if deck_html else "122px"
 
     return f"""
     <html>
@@ -344,7 +345,7 @@ def build_general_b(title, description, image_data, section_label, logo_data):
           .accent {{
             position: absolute;
             left: -40px;
-            top: 64px;
+            top: 62px;
             width: 14px;
             height: {accent_height};
             background: #2d572c;
@@ -414,10 +415,10 @@ def build_deportes_a(title, description, image_data, section_label_unused, logo_
             left: 0;
             right: 0;
             bottom: 0;
-            min-height: 420px;
-            padding: 225px 56px 135px 56px;
+            min-height: 410px;
+            padding: 200px 56px 135px 56px;
             background: rgba(16, 52, 39, 0.97);
-            clip-path: polygon(0 24%, 100% 10%, 100% 100%, 0 100%);
+            clip-path: polygon(0 26%, 100% 12%, 100% 100%, 0 100%);
             z-index: 10;
           }}
 
@@ -453,7 +454,7 @@ def build_deportes_a(title, description, image_data, section_label_unused, logo_
             display: inline;
             color: #fff;
             background: #f37021;
-            padding: 4px 12px 2px 12px;
+            padding: 3px 10px 1px 10px;
             box-decoration-break: clone;
             -webkit-box-decoration-break: clone;
           }}
@@ -502,7 +503,7 @@ def build_deportes_b(title, description, image_data, section_label_unused, logo_
           }
     """ if deck_html else ""
 
-    accent_height = "146px" if deck_html else "122px"
+    accent_height = "146px" if deck_html else "118px"
 
     return f"""
     <html>
@@ -552,7 +553,7 @@ def build_deportes_b(title, description, image_data, section_label_unused, logo_
             display: inline;
             color: #fff;
             background: #f37021;
-            padding: 1px 10px 0 10px;
+            padding: 1px 8px 0 8px;
             box-decoration-break: clone;
             -webkit-box-decoration-break: clone;
           }}
@@ -616,12 +617,12 @@ def build_policiales(title, description, image_data, section_label, logo_data):
             background:
               linear-gradient(
                 to bottom,
-                rgba(0,0,0,0) 0%,
-                rgba(0,0,0,0) 46%,
-                rgba(0,0,0,0.08) 56%,
-                rgba(0,0,0,0.58) 68%,
-                rgba(0,0,0,0.88) 80%,
-                rgba(0,0,0,0.95) 100%
+                rgba(0, 0, 0, 0) 0%,
+                rgba(0, 0, 0, 0) 46%,
+                rgba(0, 0, 0, 0.08) 56%,
+                rgba(0, 0, 0, 0.58) 68%,
+                rgba(0, 0, 0, 0.88) 80%,
+                rgba(0, 0, 0, 0.95) 100%
               );
             z-index: 5;
           }}
