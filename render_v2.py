@@ -1,4 +1,4 @@
-RENDER_VERSION = "V2-2026-03-08-REBUILD-06"
+RENDER_VERSION = "V2-2026-03-08-REBUILD-05"
 
 def safe_bg_style(
     image_data: str,
