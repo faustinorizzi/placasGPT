@@ -1,4 +1,5 @@
-RENDER_VERSION = "V2-2026-03-09-REBUILD-09"
+RENDER_VERSION = "V2-2026-03-09-REBUILD-10"
+
 
 def safe_bg_style(
     image_data: str,
@@ -229,12 +230,12 @@ def build_general_a1(title, description, image_data, section_label, logo_data):
             left: 0;
             right: 0;
             bottom: 0;
-            height: 210px;
+            height: 230px;
             background: linear-gradient(
               to top,
-              rgba(10, 40, 25, 0.82) 0%,
-              rgba(12, 48, 30, 0.54) 40%,
-              rgba(18, 71, 43, 0.18) 78%,
+              rgba(7, 28, 18, 0.92) 0%,
+              rgba(10, 40, 25, 0.68) 36%,
+              rgba(14, 54, 33, 0.28) 74%,
               rgba(18, 71, 43, 0.00) 100%
             );
             z-index: 12;
@@ -284,26 +285,26 @@ def build_general_b(title, description, image_data, section_label, logo_data):
     photo_style = f"background-image: url('{image_data}');" if image_data else ""
     deck_html = f'<div class="deck">{description}</div>' if show_deck(description) else ""
 
-    title_lines = title.count("<br>") + 1 if "<br>" in title else 3
-    if len(title) < 60:
+    if len(title) <= 52:
         title_lines = 2
-    elif len(title) < 100:
+    elif len(title) <= 92:
         title_lines = 3
     else:
         title_lines = 4
 
     accent_height_map = {
-        2: "98px",
-        3: "136px",
-        4: "178px",
+        2: "88px",
+        3: "128px",
+        4: "170px",
     }
-    accent_height = accent_height_map.get(title_lines, "136px")
+    accent_height = accent_height_map.get(title_lines, "128px")
+
     if deck_html and title_lines == 2:
-        accent_height = "128px"
+        accent_height = "116px"
     elif deck_html and title_lines == 3:
-        accent_height = "162px"
+        accent_height = "152px"
     elif deck_html and title_lines >= 4:
-        accent_height = "198px"
+        accent_height = "190px"
 
     deck_css = """
           .deck {
@@ -364,7 +365,7 @@ def build_general_b(title, description, image_data, section_label, logo_data):
           .accent {{
             position: absolute;
             left: -40px;
-            top: 62px;
+            top: 66px;
             width: 14px;
             height: {accent_height};
             background: #2d572c;
@@ -456,13 +457,13 @@ def build_deportes_a(title, description, image_data, section_label_unused, logo_
           }}
 
           .hl-txt {{
-            color: #f37021;
+            color: #8FD14F;
           }}
 
           .hl-bg {{
             display: inline;
             color: #fff;
-            background: #f37021;
+            background: #8FD14F;
             padding: 3px 10px 1px 10px;
             box-decoration-break: clone;
             -webkit-box-decoration-break: clone;
@@ -516,6 +517,7 @@ def build_deportes_b(title, description, image_data, section_label_unused, logo_
         4: "164px",
     }
     accent_height = accent_height_map.get(title_lines, "126px")
+
     if deck_html and title_lines == 2:
         accent_height = "120px"
     elif deck_html and title_lines == 3:
@@ -577,8 +579,8 @@ def build_deportes_b(title, description, image_data, section_label_unused, logo_
           .highlight {{
             display: inline;
             color: #fff;
-            background: #f37021;
-            padding: 1px 8px 0 8px;
+            background: #8FD14F;
+            padding: 0px 6px 0 6px;
             box-decoration-break: clone;
             -webkit-box-decoration-break: clone;
           }}
@@ -589,7 +591,7 @@ def build_deportes_b(title, description, image_data, section_label_unused, logo_
             top: 0;
             width: 14px;
             height: {accent_height};
-            background: #f37021;
+            background: #8FD14F;
           }}
 
           {deck_css}
