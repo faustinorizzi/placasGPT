@@ -1,4 +1,5 @@
-RENDER_VERSION = "V2-2026-03-08-REBUILD-03"
+RENDER_VERSION = "V2-2026-03-08-REBUILD-04"
+
 
 def safe_bg_style(
     image_data: str,
@@ -61,10 +62,6 @@ def global_styles() -> str:
         text-transform: uppercase;
       }
 
-      .title-font {
-        font-family: 'Passion One', cursive;
-      }
-
       .deck {
         font-family: 'Barlow Condensed', sans-serif;
         font-size: 28px;
@@ -97,14 +94,22 @@ def build_post_html(
         return build_deportes_a(
             title, description, image_data, section_label, logo_white_data
         )
+
     if family == "deportes_b":
         return build_deportes_b(
             title, description, image_data, section_label, logo_green_data
         )
+
     if family == "general_b":
         return build_general_b(
             title, description, image_data, section_label, logo_green_data
         )
+
+    if family == "general_a1":
+        return build_general_a1(
+            title, description, image_data, section_label, logo_white_data
+        )
+
     if family == "policiales":
         return build_policiales(
             title, description, image_data, section_label, logo_white_data
@@ -141,11 +146,11 @@ def build_general_a(title, description, image_data, section_label, logo_data):
               linear-gradient(
                 to bottom,
                 rgba(0,0,0,0) 0%,
-                rgba(0,0,0,0) 44%,
-                rgba(0,0,0,0.06) 54%,
-                rgba(17,62,39,0.50) 66%,
-                rgba(18,71,43,0.92) 78%,
-                rgba(18,71,43,0.97) 100%
+                rgba(0,0,0,0) 46%,
+                rgba(0,0,0,0.06) 56%,
+                rgba(17,62,39,0.52) 68%,
+                rgba(18,71,43,0.93) 80%,
+                rgba(18,71,43,0.98) 100%
               );
             z-index: 5;
           }}
@@ -174,6 +179,86 @@ def build_general_a(title, description, image_data, section_label, logo_data):
       <body>
         <div class="canvas gena">
           <div class="overlay"></div>
+          <div class="title-wrap">
+            <h1 class="title">{title}</h1>
+          </div>
+          {logo_html(logo_data)}
+        </div>
+      </body>
+    </html>
+    """
+
+
+def build_general_a1(title, description, image_data, section_label, logo_data):
+    photo_style = (
+        f"background-image: url('{image_data}');"
+        if image_data
+        else "background: linear-gradient(135deg, #2d572c 0%, #183624 100%);"
+    )
+
+    return f"""
+    <html>
+      <head>
+        <meta charset="utf-8">
+        {global_styles()}
+        <style>
+          .gena1 {{
+            {photo_style}
+            background-size: cover;
+            background-position: center;
+          }}
+
+          .overlay {{
+            position: absolute;
+            inset: 0;
+            background:
+              linear-gradient(
+                to bottom,
+                rgba(0,0,0,0) 0%,
+                rgba(0,0,0,0) 50%,
+                rgba(0,0,0,0.10) 60%,
+                rgba(0,0,0,0.26) 68%,
+                rgba(0,0,0,0.38) 74%,
+                rgba(0,0,0,0.48) 100%
+              );
+            z-index: 5;
+          }}
+
+          .green-base {{
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            min-height: 360px;
+            background: rgba(18, 71, 43, 0.96);
+            z-index: 10;
+          }}
+
+          .title-wrap {{
+            position: absolute;
+            left: 56px;
+            right: 180px;
+            bottom: 180px;
+            z-index: 20;
+          }}
+
+          .title {{
+            font-family: 'Passion One', cursive;
+            font-size: 66px;
+            line-height: 0.98;
+            color: #fff;
+          }}
+
+          .brand-logo {{
+            width: 228px;
+            bottom: 54px;
+          }}
+        </style>
+      </head>
+      <body>
+        <div class="canvas gena1">
+          <div class="overlay"></div>
+          <div class="green-base"></div>
           <div class="title-wrap">
             <h1 class="title">{title}</h1>
           </div>
@@ -488,12 +573,10 @@ def build_deportes_b(title, description, image_data, section_label, logo_data):
 
 
 def build_policiales(title, description, image_data, section_label, logo_data):
-    bg = safe_bg_style(
-        image_data,
-        "rgba(0, 0, 0, 0.18)",
-        "rgba(0, 0, 0, 0.82)",
-        "#171717",
-        "#080808",
+    photo_style = (
+        f"background-image: url('{image_data}');"
+        if image_data
+        else "background: linear-gradient(135deg, #171717 0%, #080808 100%);"
     )
 
     return f"""
@@ -503,34 +586,39 @@ def build_policiales(title, description, image_data, section_label, logo_data):
         {global_styles()}
         <style>
           .pol {{
-            {bg}
+            {photo_style}
             background-size: cover;
             background-position: center;
           }}
 
-          .pol::after {{
-            content: "";
+          .overlay {{
             position: absolute;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            height: 14px;
-            background: rgba(255,255,255,0.65);
-            z-index: 8;
+            inset: 0;
+            background:
+              linear-gradient(
+                to bottom,
+                rgba(0,0,0,0) 0%,
+                rgba(0,0,0,0) 46%,
+                rgba(0,0,0,0.08) 56%,
+                rgba(0,0,0,0.58) 68%,
+                rgba(0,0,0,0.88) 80%,
+                rgba(0,0,0,0.95) 100%
+              );
+            z-index: 5;
           }}
 
           .title-wrap {{
             position: absolute;
             left: 56px;
             right: 180px;
-            bottom: 205px;
-            z-index: 12;
+            bottom: 180px;
+            z-index: 20;
           }}
 
           .title {{
             font-family: 'Passion One', cursive;
-            font-size: 72px;
-            line-height: 0.95;
+            font-size: 68px;
+            line-height: 0.98;
             color: #fff;
           }}
 
@@ -542,6 +630,7 @@ def build_policiales(title, description, image_data, section_label, logo_data):
       </head>
       <body>
         <div class="canvas pol">
+          <div class="overlay"></div>
           <div class="title-wrap">
             <h1 class="title">{title}</h1>
           </div>
