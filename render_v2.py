@@ -1,4 +1,4 @@
-RENDER_VERSION = "V2-2026-03-08-REBUILD-04"
+RENDER_VERSION = "V2-2026-03-08-REBUILD-05"
 
 
 def safe_bg_style(
@@ -16,10 +16,11 @@ def safe_bg_style(
     return f"background: linear-gradient(135deg, {fallback_a} 0%, {fallback_b} 100%);"
 
 
-def logo_html(logo_data: str) -> str:
+def logo_html(logo_data: str, extra_class: str = "") -> str:
     if not logo_data:
         return ""
-    return f'<img src="{logo_data}" alt="El Periódico" class="brand-logo" />'
+    klass = f"brand-logo {extra_class}".strip()
+    return f'<img src="{logo_data}" alt="El Periódico" class="{klass}" />'
 
 
 def global_styles() -> str:
@@ -28,6 +29,7 @@ def global_styles() -> str:
       @import url('https://fonts.googleapis.com/css2?family=Passion+One:wght@400;700;900&family=Barlow+Condensed:wght@400;600;700;900&display=swap');
 
       * { margin: 0; padding: 0; box-sizing: border-box; }
+
       body {
         background: #e9e9e9;
         display: flex;
@@ -46,11 +48,12 @@ def global_styles() -> str:
 
       .brand-logo {
         position: absolute;
-        right: 56px;
-        bottom: 52px;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 50px;
         width: 220px;
         height: auto;
-        z-index: 40;
+        z-index: 50;
       }
 
       .section-label {
@@ -107,7 +110,7 @@ def build_post_html(
 
     if family == "general_a1":
         return build_general_a1(
-            title, description, image_data, section_label, logo_white_data
+            title, description, image_data, section_label, logo_green_data
         )
 
     if family == "policiales":
@@ -147,10 +150,10 @@ def build_general_a(title, description, image_data, section_label, logo_data):
                 to bottom,
                 rgba(0,0,0,0) 0%,
                 rgba(0,0,0,0) 46%,
-                rgba(0,0,0,0.06) 56%,
-                rgba(17,62,39,0.52) 68%,
-                rgba(18,71,43,0.93) 80%,
-                rgba(18,71,43,0.98) 100%
+                rgba(0,0,0,0.05) 56%,
+                rgba(17,62,39,0.46) 68%,
+                rgba(18,71,43,0.86) 80%,
+                rgba(18,71,43,0.95) 100%
               );
             z-index: 5;
           }}
@@ -158,8 +161,8 @@ def build_general_a(title, description, image_data, section_label, logo_data):
           .title-wrap {{
             position: absolute;
             left: 56px;
-            right: 180px;
-            bottom: 180px;
+            right: 80px;
+            bottom: 185px;
             z-index: 20;
           }}
 
@@ -171,8 +174,8 @@ def build_general_a(title, description, image_data, section_label, logo_data):
           }}
 
           .brand-logo {{
-            width: 228px;
-            bottom: 54px;
+            width: 220px;
+            bottom: 40px;
           }}
         </style>
       </head>
@@ -214,52 +217,42 @@ def build_general_a1(title, description, image_data, section_label, logo_data):
             background:
               linear-gradient(
                 to bottom,
-                rgba(0,0,0,0) 0%,
-                rgba(0,0,0,0) 50%,
-                rgba(0,0,0,0.10) 60%,
-                rgba(0,0,0,0.26) 68%,
-                rgba(0,0,0,0.38) 74%,
-                rgba(0,0,0,0.48) 100%
+                rgba(0,0,0,0.02) 0%,
+                rgba(0,0,0,0.10) 100%
               );
             z-index: 5;
           }}
 
-          .green-base {{
+          .card {{
             position: absolute;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            min-height: 360px;
-            background: rgba(18, 71, 43, 0.96);
-            z-index: 10;
-          }}
-
-          .title-wrap {{
-            position: absolute;
-            left: 56px;
-            right: 180px;
+            left: 54px;
+            right: 54px;
             bottom: 180px;
+            background: #f5f2ec;
+            border: 4px solid #2d572c;
+            border-radius: 18px;
+            padding: 34px 34px 30px 34px;
             z-index: 20;
+            box-shadow: 0 8px 26px rgba(0,0,0,0.18);
           }}
 
           .title {{
             font-family: 'Passion One', cursive;
-            font-size: 66px;
-            line-height: 0.98;
-            color: #fff;
+            font-size: 62px;
+            line-height: 0.99;
+            color: #141414;
           }}
 
           .brand-logo {{
-            width: 228px;
-            bottom: 54px;
+            width: 220px;
+            bottom: 40px;
           }}
         </style>
       </head>
       <body>
         <div class="canvas gena1">
           <div class="overlay"></div>
-          <div class="green-base"></div>
-          <div class="title-wrap">
+          <div class="card">
             <h1 class="title">{title}</h1>
           </div>
           {logo_html(logo_data)}
@@ -276,9 +269,11 @@ def build_general_b(title, description, image_data, section_label, logo_data):
     deck_css = """
           .deck {
             margin-top: 24px;
-            margin-right: 40px;
+            margin-right: 0;
           }
     """ if deck_html else ""
+
+    accent_height = "146px" if deck_html else "122px"
 
     return f"""
     <html>
@@ -295,7 +290,7 @@ def build_general_b(title, description, image_data, section_label, logo_data):
             top: 0;
             left: 0;
             width: 100%;
-            height: 785px;
+            height: 760px;
             {photo_style}
             background-size: cover;
             background-position: center;
@@ -306,15 +301,15 @@ def build_general_b(title, description, image_data, section_label, logo_data):
             left: 0;
             right: 0;
             bottom: 0;
-            height: 565px;
+            height: 590px;
             background: #f5f2ec;
-            padding: 54px 56px 56px 56px;
+            padding: 54px 56px 110px 56px;
           }}
 
           .inner {{
             position: relative;
             margin-left: 40px;
-            margin-right: 190px;
+            margin-right: 40px;
           }}
 
           .section-label {{
@@ -332,17 +327,17 @@ def build_general_b(title, description, image_data, section_label, logo_data):
           .accent {{
             position: absolute;
             left: -40px;
-            top: 66px;
+            top: 64px;
             width: 14px;
-            height: 152px;
+            height: {accent_height};
             background: #2d572c;
           }}
 
           {deck_css}
 
           .brand-logo {{
-            width: 216px;
-            bottom: 44px;
+            width: 220px;
+            bottom: 38px;
           }}
         </style>
       </head>
@@ -367,8 +362,8 @@ def build_general_b(title, description, image_data, section_label, logo_data):
 def build_deportes_a(title, description, image_data, section_label, logo_data):
     bg = safe_bg_style(
         image_data,
-        "rgba(8, 22, 17, 0.03)",
-        "rgba(8, 18, 14, 0.24)",
+        "rgba(8, 22, 17, 0.02)",
+        "rgba(8, 18, 14, 0.18)",
         "#143428",
         "#10281f",
     )
@@ -402,22 +397,22 @@ def build_deportes_a(title, description, image_data, section_label, logo_data):
             left: 0;
             right: 0;
             bottom: 0;
-            min-height: 390px;
-            padding: 220px 56px 138px 56px;
+            min-height: 420px;
+            padding: 225px 56px 135px 56px;
             background: rgba(16, 52, 39, 0.97);
-            clip-path: polygon(0 26%, 100% 10%, 100% 100%, 0 100%);
+            clip-path: polygon(0 24%, 100% 10%, 100% 100%, 0 100%);
             z-index: 10;
           }}
 
           .inner {{
             position: relative;
-            margin-right: 170px;
+            margin-right: 0;
             z-index: 12;
           }}
 
           .title {{
             font-family: 'Passion One', cursive;
-            font-size: 70px;
+            font-size: 68px;
             line-height: 0.97;
             color: #fff;
             text-transform: uppercase;
@@ -437,8 +432,8 @@ def build_deportes_a(title, description, image_data, section_label, logo_data):
           }}
 
           .brand-logo {{
-            width: 228px;
-            bottom: 52px;
+            width: 220px;
+            bottom: 40px;
           }}
         </style>
       </head>
@@ -475,9 +470,11 @@ def build_deportes_b(title, description, image_data, section_label, logo_data):
     deck_css = """
           .deck {
             margin-top: 22px;
-            margin-right: 40px;
+            margin-right: 0;
           }
     """ if deck_html else ""
+
+    accent_height = "146px" if deck_html else "122px"
 
     return f"""
     <html>
@@ -494,7 +491,7 @@ def build_deportes_b(title, description, image_data, section_label, logo_data):
             top: 0;
             left: 0;
             width: 100%;
-            height: 770px;
+            height: 760px;
             {photo_style}
             background-size: cover;
             background-position: center;
@@ -505,15 +502,15 @@ def build_deportes_b(title, description, image_data, section_label, logo_data):
             left: 0;
             right: 0;
             bottom: 0;
-            height: 510px;
+            height: 590px;
             background: #efede8;
-            padding: 54px 56px 56px 56px;
+            padding: 54px 56px 110px 56px;
           }}
 
           .inner {{
             position: relative;
             margin-left: 38px;
-            margin-right: 185px;
+            margin-right: 40px;
           }}
 
           .section-label {{
@@ -523,7 +520,7 @@ def build_deportes_b(title, description, image_data, section_label, logo_data):
 
           .title {{
             font-family: 'Passion One', cursive;
-            font-size: 60px;
+            font-size: 58px;
             line-height: 1.06;
             color: #111;
           }}
@@ -540,17 +537,17 @@ def build_deportes_b(title, description, image_data, section_label, logo_data):
           .accent {{
             position: absolute;
             left: -38px;
-            top: 66px;
+            top: 64px;
             width: 14px;
-            height: 152px;
+            height: {accent_height};
             background: #f37021;
           }}
 
           {deck_css}
 
           .brand-logo {{
-            width: 216px;
-            bottom: 42px;
+            width: 220px;
+            bottom: 38px;
           }}
         </style>
       </head>
@@ -610,8 +607,8 @@ def build_policiales(title, description, image_data, section_label, logo_data):
           .title-wrap {{
             position: absolute;
             left: 56px;
-            right: 180px;
-            bottom: 180px;
+            right: 80px;
+            bottom: 185px;
             z-index: 20;
           }}
 
@@ -623,8 +620,8 @@ def build_policiales(title, description, image_data, section_label, logo_data):
           }}
 
           .brand-logo {{
-            width: 228px;
-            bottom: 54px;
+            width: 220px;
+            bottom: 40px;
           }}
         </style>
       </head>
