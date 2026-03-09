@@ -1,4 +1,5 @@
-RENDER_VERSION = "V2-2026-03-08-REBUILD-01"
+RENDER_VERSION = "V2-2026-03-08-REBUILD-02"
+
 
 def safe_bg_style(
     image_data: str,
@@ -49,7 +50,7 @@ def global_styles() -> str:
         bottom: 52px;
         width: 220px;
         height: auto;
-        z-index: 20;
+        z-index: 30;
       }
 
       .section-label {
@@ -99,13 +100,8 @@ def build_post_html(
 
 
 def build_general_a(title, description, image_data, section_label, logo_data):
-    bg = safe_bg_style(
-        image_data,
-        "rgba(16, 55, 35, 0.18)",
-        "rgba(12, 45, 28, 0.78)",
-        "#2d572c",
-        "#183624",
-    )
+    photo_style = f"background-image: url('{image_data}');" if image_data else "background: linear-gradient(135deg, #2d572c 0%, #183624 100%);"
+
     return f"""
     <html>
       <head>
@@ -113,9 +109,24 @@ def build_general_a(title, description, image_data, section_label, logo_data):
         {global_styles()}
         <style>
           .gena {{
-            {bg}
+            {photo_style}
             background-size: cover;
             background-position: center;
+          }}
+
+          .overlay {{
+            position: absolute;
+            inset: 0;
+            background:
+              linear-gradient(
+                to bottom,
+                rgba(0,0,0,0) 0%,
+                rgba(0,0,0,0) 44%,
+                rgba(24,70,43,0.18) 56%,
+                rgba(20,65,40,0.62) 76%,
+                rgba(16,52,33,0.88) 100%
+              );
+            z-index: 5;
           }}
 
           .gena::after {{
@@ -132,26 +143,27 @@ def build_general_a(title, description, image_data, section_label, logo_data):
           .title-wrap {{
             position: absolute;
             left: 56px;
-            right: 150px;
-            bottom: 182px;
+            right: 180px;
+            bottom: 205px;
             z-index: 12;
           }}
 
           .title {{
             font-family: 'Passion One', cursive;
-            font-size: 88px;
-            line-height: 0.92;
+            font-size: 72px;
+            line-height: 0.95;
             color: #fff;
-            text-transform: uppercase;
           }}
 
           .brand-logo {{
-            width: 232px;
+            width: 228px;
+            bottom: 54px;
           }}
         </style>
       </head>
       <body>
         <div class="canvas gena">
+          <div class="overlay"></div>
           <div class="title-wrap">
             <h1 class="title">{title}</h1>
           </div>
@@ -164,6 +176,7 @@ def build_general_a(title, description, image_data, section_label, logo_data):
 
 def build_general_b(title, description, image_data, section_label, logo_data):
     photo_style = f"background-image: url('{image_data}');" if image_data else ""
+
     return f"""
     <html>
       <head>
@@ -192,7 +205,7 @@ def build_general_b(title, description, image_data, section_label, logo_data):
             bottom: 0;
             height: 565px;
             background: #f5f2ec;
-            padding: 56px 56px 56px 56px;
+            padding: 54px 56px 56px 56px;
           }}
 
           .accent {{
@@ -200,13 +213,13 @@ def build_general_b(title, description, image_data, section_label, logo_data):
             left: 56px;
             top: 58px;
             width: 14px;
-            height: 150px;
+            height: 140px;
             background: #2d572c;
           }}
 
           .inner {{
             margin-left: 40px;
-            margin-right: 170px;
+            margin-right: 190px;
           }}
 
           .section-label {{
@@ -216,15 +229,14 @@ def build_general_b(title, description, image_data, section_label, logo_data):
 
           .title {{
             font-family: 'Passion One', cursive;
-            font-size: 76px;
-            line-height: 0.98;
+            font-size: 66px;
+            line-height: 1.02;
             color: #141414;
-            text-transform: uppercase;
           }}
 
           .brand-logo {{
-            width: 220px;
-            bottom: 42px;
+            width: 216px;
+            bottom: 44px;
           }}
         </style>
       </head>
@@ -248,20 +260,18 @@ def build_general_b(title, description, image_data, section_label, logo_data):
 def build_deportes_a(title, description, image_data, section_label, logo_data):
     bg = safe_bg_style(
         image_data,
-        "rgba(10, 24, 18, 0.10)",
-        "rgba(8, 18, 14, 0.48)",
+        "rgba(8, 22, 17, 0.04)",
+        "rgba(8, 18, 14, 0.34)",
         "#143428",
         "#10281f",
     )
 
-    title_html = title
+    title_html = title.upper()
     if ":" in title:
-        left, right = title.split(":", 1)
-        title_html = (
-            f'<span class="hl-bg">{left.strip()}:</span> {right.strip()}'
-        )
+        left, right = title.upper().split(":", 1)
+        title_html = f'<span class="hl-bg">{left.strip()}:</span> {right.strip()}'
     else:
-        words = title.split()
+        words = title.upper().split()
         if len(words) >= 4:
             title_html = (
                 f'<span class="hl-txt">{" ".join(words[:2])}</span> '
@@ -296,23 +306,23 @@ def build_deportes_a(title, description, image_data, section_label, logo_data):
             left: 0;
             right: 0;
             bottom: 0;
-            min-height: 405px;
-            padding: 150px 56px 140px 56px;
+            min-height: 365px;
+            padding: 170px 56px 138px 56px;
             background: rgba(16, 52, 39, 0.96);
-            clip-path: polygon(0 36%, 100% 14%, 100% 100%, 0 100%);
+            clip-path: polygon(0 32%, 100% 14%, 100% 100%, 0 100%);
             z-index: 10;
           }}
 
           .inner {{
             position: relative;
-            margin-right: 150px;
+            margin-right: 165px;
             z-index: 12;
           }}
 
           .title {{
             font-family: 'Passion One', cursive;
-            font-size: 92px;
-            line-height: 0.93;
+            font-size: 76px;
+            line-height: 0.95;
             color: #fff;
             text-transform: uppercase;
           }}
@@ -325,13 +335,14 @@ def build_deportes_a(title, description, image_data, section_label, logo_data):
             display: inline;
             color: #fff;
             background: #f37021;
-            padding: 4px 14px 2px 14px;
+            padding: 4px 12px 2px 12px;
             box-decoration-break: clone;
             -webkit-box-decoration-break: clone;
           }}
 
           .brand-logo {{
-            width: 230px;
+            width: 228px;
+            bottom: 52px;
           }}
         </style>
       </head>
@@ -400,13 +411,13 @@ def build_deportes_b(title, description, image_data, section_label, logo_data):
             left: 56px;
             top: 54px;
             width: 14px;
-            height: 138px;
+            height: 130px;
             background: #f37021;
           }}
 
           .inner {{
             margin-left: 38px;
-            margin-right: 170px;
+            margin-right: 185px;
           }}
 
           .section-label {{
@@ -416,24 +427,23 @@ def build_deportes_b(title, description, image_data, section_label, logo_data):
 
           .title {{
             font-family: 'Passion One', cursive;
-            font-size: 72px;
-            line-height: 1.02;
+            font-size: 62px;
+            line-height: 1.06;
             color: #111;
-            text-transform: uppercase;
           }}
 
           .highlight {{
             display: inline;
             color: #fff;
             background: #f37021;
-            padding: 2px 12px 0 12px;
+            padding: 1px 10px 0 10px;
             box-decoration-break: clone;
             -webkit-box-decoration-break: clone;
           }}
 
           .brand-logo {{
-            width: 220px;
-            bottom: 40px;
+            width: 216px;
+            bottom: 42px;
           }}
         </style>
       </head>
@@ -457,11 +467,12 @@ def build_deportes_b(title, description, image_data, section_label, logo_data):
 def build_policiales(title, description, image_data, section_label, logo_data):
     bg = safe_bg_style(
         image_data,
-        "rgba(0, 0, 0, 0.28)",
-        "rgba(0, 0, 0, 0.84)",
+        "rgba(0, 0, 0, 0.18)",
+        "rgba(0, 0, 0, 0.82)",
         "#171717",
         "#080808",
     )
+
     return f"""
     <html>
       <head>
@@ -488,21 +499,21 @@ def build_policiales(title, description, image_data, section_label, logo_data):
           .title-wrap {{
             position: absolute;
             left: 56px;
-            right: 150px;
-            bottom: 182px;
+            right: 180px;
+            bottom: 205px;
             z-index: 12;
           }}
 
           .title {{
             font-family: 'Passion One', cursive;
-            font-size: 88px;
-            line-height: 0.92;
+            font-size: 72px;
+            line-height: 0.95;
             color: #fff;
-            text-transform: uppercase;
           }}
 
           .brand-logo {{
-            width: 232px;
+            width: 228px;
+            bottom: 54px;
           }}
         </style>
       </head>
