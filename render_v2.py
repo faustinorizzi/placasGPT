@@ -504,20 +504,6 @@ def build_deportes_b(title, description, image_data, section_label_unused, logo_
                 f'{" ".join(words[3:])}'
             )
 
-    if len(title) <= 52:
-        title_lines = 2
-    elif len(title) <= 92:
-        title_lines = 3
-    else:
-        title_lines = 4
-
-    accent_height_map = {
-        2: "88px",
-        3: "128px",
-        4: "170px",
-    }
-    accent_height = accent_height_map.get(title_lines, "128px")
-
     return f"""
     <html>
       <head>
@@ -547,11 +533,11 @@ def build_deportes_b(title, description, image_data, section_label_unused, logo_
             height: 590px;
             background: #efede8;
             padding: 54px 56px 110px 56px;
+            border-top: 16px solid #8FD14F;
           }}
 
           .inner {{
             position: relative;
-            margin-left: 38px;
             margin-right: 40px;
           }}
 
@@ -571,15 +557,6 @@ def build_deportes_b(title, description, image_data, section_label_unused, logo_
             -webkit-box-decoration-break: clone;
           }}
 
-          .accent {{
-            position: absolute;
-            left: -38px;
-            top: 0;
-            width: 14px;
-            height: {accent_height};
-            background: #8FD14F;
-          }}
-
           .brand-logo {{
             width: 220px;
             bottom: 38px;
@@ -591,7 +568,6 @@ def build_deportes_b(title, description, image_data, section_label_unused, logo_
           <div class="photo"></div>
           <div class="panel">
             <div class="inner">
-              <div class="accent"></div>
               <h1 class="title">{title_html}</h1>
             </div>
             {logo_html(logo_data)}
