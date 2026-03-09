@@ -491,7 +491,6 @@ def build_deportes_a(title, description, image_data, section_label_unused, logo_
 
 def build_deportes_b(title, description, image_data, section_label_unused, logo_data):
     photo_style = f"background-image: url('{image_data}');" if image_data else ""
-    deck_html = f'<div class="deck">{description}</div>' if show_deck(description) else ""
 
     title_html = title
     if ":" in title:
@@ -505,32 +504,19 @@ def build_deportes_b(title, description, image_data, section_label_unused, logo_
                 f'{" ".join(words[3:])}'
             )
 
-    title_lines = 2
-    if len(title) >= 65:
+    if len(title) <= 52:
+        title_lines = 2
+    elif len(title) <= 92:
         title_lines = 3
-    if len(title) >= 110:
+    else:
         title_lines = 4
 
     accent_height_map = {
-        2: "90px",
-        3: "126px",
-        4: "164px",
+        2: "88px",
+        3: "128px",
+        4: "170px",
     }
-    accent_height = accent_height_map.get(title_lines, "126px")
-
-    if deck_html and title_lines == 2:
-        accent_height = "120px"
-    elif deck_html and title_lines == 3:
-        accent_height = "154px"
-    elif deck_html and title_lines >= 4:
-        accent_height = "188px"
-
-    deck_css = """
-          .deck {
-            margin-top: 22px;
-            margin-right: 0;
-          }
-    """ if deck_html else ""
+    accent_height = accent_height_map.get(title_lines, "128px")
 
     return f"""
     <html>
@@ -594,8 +580,6 @@ def build_deportes_b(title, description, image_data, section_label_unused, logo_
             background: #8FD14F;
           }}
 
-          {deck_css}
-
           .brand-logo {{
             width: 220px;
             bottom: 38px;
@@ -609,7 +593,6 @@ def build_deportes_b(title, description, image_data, section_label_unused, logo_
             <div class="inner">
               <div class="accent"></div>
               <h1 class="title">{title_html}</h1>
-              {deck_html}
             </div>
             {logo_html(logo_data)}
           </div>
