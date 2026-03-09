@@ -1,4 +1,4 @@
-RENDER_VERSION = "V2-2026-03-09-REBUILD-12"
+RENDER_VERSION = "V2-2026-03-09-REBUILD-12A"
 
 
 def safe_bg_style(
@@ -160,8 +160,8 @@ def build_general_a(title, description, image_data, section_label, logo_data):
 
           .title-wrap {{
             position: absolute;
-            left: 108px;
-            right: 108px;
+            left: 92px;
+            right: 92px;
             bottom: 250px;
             z-index: 20;
           }}
@@ -238,15 +238,20 @@ def build_general_a1(title, description, image_data, section_label, logo_data):
 
           .card {{
             position: absolute;
-            left: 108px;
-            right: 108px;
+            left: 76px;
+            right: 76px;
             bottom: 250px;
             background: #f5f2ec;
             border: 3px solid #2d572c;
             border-radius: 18px;
-            padding: 38px 36px 34px 36px;
+            padding: 36px 32px 32px 32px;
             z-index: 20;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
+          }}
+
+          .title-wrap {{
+            margin-left: 16px;
+            margin-right: 16px;
           }}
 
           .title {{
@@ -262,7 +267,9 @@ def build_general_a1(title, description, image_data, section_label, logo_data):
           <div class="overlay"></div>
           <div class="bottom-fade"></div>
           <div class="card">
-            <h1 class="title">{title}</h1>
+            <div class="title-wrap">
+              <h1 class="title">{title}</h1>
+            </div>
           </div>
           {logo_html(logo_data)}
         </div>
@@ -429,8 +436,8 @@ def build_deportes_a(title, description, image_data, section_label_unused, logo_
 
           .inner {{
             position: relative;
-            margin-left: 52px;
-            margin-right: 52px;
+            margin-left: 36px;
+            margin-right: 36px;
             z-index: 12;
           }}
 
