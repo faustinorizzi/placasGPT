@@ -376,7 +376,7 @@ def build_general_b(title, description, image_data, section_label, logo_data):
     """
 
 
-def build_deportes_a(title, description, section_label_unused, image_data, logo_data):
+def build_deportes_a(title, description, image_data, section_label_unused, logo_data):
     bg = safe_bg_style(
         image_data,
         "rgba(8, 22, 17, 0.02)",
