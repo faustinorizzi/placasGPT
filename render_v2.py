@@ -1,4 +1,4 @@
-RENDER_VERSION = "V2-2026-03-09-REBUILD-11"
+RENDER_VERSION = "V2-2026-03-09-REBUILD-12"
 
 
 def safe_bg_style(
@@ -50,7 +50,7 @@ def global_styles() -> str:
         position: absolute;
         left: 50%;
         transform: translateX(-50%);
-        bottom: 40px;
+        bottom: 108px;
         width: 220px;
         height: auto;
         z-index: 50;
@@ -160,9 +160,9 @@ def build_general_a(title, description, image_data, section_label, logo_data):
 
           .title-wrap {{
             position: absolute;
-            left: 56px;
-            right: 40px;
-            bottom: 185px;
+            left: 108px;
+            right: 108px;
+            bottom: 250px;
             z-index: 20;
           }}
 
@@ -171,11 +171,6 @@ def build_general_a(title, description, image_data, section_label, logo_data):
             font-size: 64px;
             line-height: 0.96;
             color: #fff;
-          }}
-
-          .brand-logo {{
-            width: 220px;
-            bottom: 40px;
           }}
         </style>
       </head>
@@ -243,9 +238,9 @@ def build_general_a1(title, description, image_data, section_label, logo_data):
 
           .card {{
             position: absolute;
-            left: 54px;
-            right: 54px;
-            bottom: 180px;
+            left: 108px;
+            right: 108px;
+            bottom: 250px;
             background: #f5f2ec;
             border: 3px solid #2d572c;
             border-radius: 18px;
@@ -259,11 +254,6 @@ def build_general_a1(title, description, image_data, section_label, logo_data):
             font-size: 60px;
             line-height: 0.98;
             color: #141414;
-          }}
-
-          .brand-logo {{
-            width: 220px;
-            bottom: 40px;
           }}
         </style>
       </head>
@@ -341,13 +331,13 @@ def build_general_b(title, description, image_data, section_label, logo_data):
             bottom: 0;
             height: 590px;
             background: #f5f2ec;
-            padding: 54px 56px 110px 56px;
+            padding: 54px 56px 178px 56px;
           }}
 
           .inner {{
             position: relative;
-            margin-left: 40px;
-            margin-right: 40px;
+            margin-left: 92px;
+            margin-right: 92px;
           }}
 
           .section-label {{
@@ -364,7 +354,7 @@ def build_general_b(title, description, image_data, section_label, logo_data):
 
           .accent {{
             position: absolute;
-            left: -40px;
+            left: -28px;
             top: 66px;
             width: 14px;
             height: {accent_height};
@@ -372,11 +362,6 @@ def build_general_b(title, description, image_data, section_label, logo_data):
           }}
 
           {deck_css}
-
-          .brand-logo {{
-            width: 220px;
-            bottom: 38px;
-          }}
         </style>
       </head>
       <body>
@@ -436,7 +421,7 @@ def build_deportes_a(title, description, image_data, section_label_unused, logo_
             right: 0;
             bottom: 0;
             min-height: 410px;
-            padding: 200px 56px 135px 56px;
+            padding: 200px 56px 178px 56px;
             background: rgba(16, 52, 39, 0.97);
             clip-path: polygon(0 26%, 100% 12%, 100% 100%, 0 100%);
             z-index: 10;
@@ -444,7 +429,8 @@ def build_deportes_a(title, description, image_data, section_label_unused, logo_
 
           .inner {{
             position: relative;
-            margin-right: 0;
+            margin-left: 52px;
+            margin-right: 52px;
             z-index: 12;
           }}
 
@@ -467,11 +453,6 @@ def build_deportes_a(title, description, image_data, section_label_unused, logo_
             padding: 3px 10px 1px 10px;
             box-decoration-break: clone;
             -webkit-box-decoration-break: clone;
-          }}
-
-          .brand-logo {{
-            width: 220px;
-            bottom: 40px;
           }}
         </style>
       </head>
@@ -532,14 +513,14 @@ def build_deportes_b(title, description, image_data, section_label_unused, logo_
             bottom: 0;
             height: 590px;
             background: #efede8;
-            padding: 64px 56px 110px 56px;
+            padding: 64px 56px 178px 56px;
             border-top: 16px solid #6DB33F;
           }}
 
           .inner {{
             position: relative;
-            margin-left: 8px;
-            margin-right: 28px;
+            margin-left: 52px;
+            margin-right: 52px;
           }}
 
           .title {{
@@ -556,11 +537,6 @@ def build_deportes_b(title, description, image_data, section_label_unused, logo_
             padding: 0px 4px 0 4px;
             box-decoration-break: clone;
             -webkit-box-decoration-break: clone;
-          }}
-
-          .brand-logo {{
-            width: 220px;
-            bottom: 38px;
           }}
         </style>
       </head>
@@ -616,9 +592,9 @@ def build_policiales(title, description, image_data, section_label, logo_data):
 
           .title-wrap {{
             position: absolute;
-            left: 56px;
-            right: 40px;
-            bottom: 185px;
+            left: 108px;
+            right: 108px;
+            bottom: 250px;
             z-index: 20;
           }}
 
@@ -627,11 +603,6 @@ def build_policiales(title, description, image_data, section_label, logo_data):
             font-size: 64px;
             line-height: 0.96;
             color: #fff;
-          }}
-
-          .brand-logo {{
-            width: 220px;
-            bottom: 40px;
           }}
         </style>
       </head>
