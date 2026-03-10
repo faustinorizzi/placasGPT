@@ -794,8 +794,8 @@ def build_policiales(title, description, image_data, section_label, logo_data):
                 rgba(0, 0, 0, 0) 50%,
                 rgba(38, 62, 140, 0.15) 62%,
                 rgba(38, 62, 140, 0.75) 75%,
-                rgba(15, 25, 70, 0.95) 88%,
-                rgba(8, 14, 45, 0.99) 100%
+                rgba(38, 62, 140, 0.92) 88%,
+                rgba(38, 62, 140, 0.97) 100%
               );
             z-index: 5;
           }}
