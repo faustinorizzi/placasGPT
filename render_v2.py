@@ -1,4 +1,4 @@
-RENDER_VERSION = "V2-2026-03-09-REBUILD-13"
+RENDER_VERSION = "V2-2026-03-10-GENA2-01"
 
 
 def safe_bg_style(
@@ -123,6 +123,11 @@ def build_post_html(
             title, description, image_data, section_label, logo_white_data
         )
 
+    if family == "general_a2":
+        return build_general_a2(
+            title, description, image_data, section_label, logo_white_data
+        )
+
     if family == "policiales":
         return build_policiales(
             title, description, image_data, section_label, logo_white_data
@@ -134,7 +139,7 @@ def build_post_html(
 
 
 # =========================================================
-# GENERAL A — Variante 1 / "Banda que corta"
+# GENERAL A — "Banda que corta"
 # =========================================================
 def build_general_a(title, description, image_data, section_label, logo_data):
     photo_style = (
@@ -226,7 +231,7 @@ def build_general_a(title, description, image_data, section_label, logo_data):
 
 
 # =========================================================
-# GENERAL A-1 — Variante 2 / "Solo borde inferior"
+# GENERAL A-1 — Caja editorial sobre foto
 # =========================================================
 def build_general_a1(title, description, image_data, section_label, logo_data):
     photo_style = (
@@ -301,6 +306,93 @@ def build_general_a1(title, description, image_data, section_label, logo_data):
       </head>
       <body>
         <div class="canvas gena1">
+          <div class="photo"></div>
+          <div class="overlay"></div>
+          <div class="b-bottom"></div>
+          <h1 class="title">{title}</h1>
+          {logo_html(logo_data)}
+        </div>
+      </body>
+    </html>
+    """
+
+
+# =========================================================
+# GENERAL A-2 — "Solo borde inferior"
+# =========================================================
+def build_general_a2(title, description, image_data, section_label, logo_data):
+    photo_style = (
+        f"background-image: url('{image_data}');"
+        if image_data
+        else "background: linear-gradient(135deg, #2d572c 0%, #183624 100%);"
+    )
+
+    return f"""
+    <html>
+      <head>
+        <meta charset="utf-8">
+        {global_styles()}
+        <style>
+          .gena2 {{
+            {photo_style}
+            background-size: cover;
+            background-position: center 30%;
+          }}
+
+          .photo {{
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 7px;
+            background: inherit;
+            background-size: cover;
+            background-position: center 30%;
+            z-index: 1;
+          }}
+
+          .b-bottom {{
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 7px;
+            background: #34693A;
+            z-index: 8;
+          }}
+
+          .overlay {{
+            position: absolute;
+            bottom: 7px;
+            left: 0;
+            right: 0;
+            height: 58%;
+            background: linear-gradient(
+              to top,
+              rgba(13,31,16,0.97) 35%,
+              rgba(13,31,16,0.80) 60%,
+              transparent 100%
+            );
+            z-index: 4;
+          }}
+
+          .title {{
+            position: absolute;
+            bottom: 175px;
+            left: 108px;
+            right: 108px;
+            font-family: 'Passion One', cursive;
+            font-size: 64px;
+            font-weight: 700;
+            line-height: 0.96;
+            color: #fff;
+            z-index: 7;
+            letter-spacing: 0.01em;
+          }}
+        </style>
+      </head>
+      <body>
+        <div class="canvas gena2">
           <div class="photo"></div>
           <div class="overlay"></div>
           <div class="b-bottom"></div>
