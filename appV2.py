@@ -281,7 +281,7 @@ if submitted:
 
     try:
         article = fetch_article_data(url.strip())
-        
+        st.write(f"DEBUG section: {article['section']} | family: {family}")
         family = choose_family(
             section=article["section"],
             title=article["title"],
