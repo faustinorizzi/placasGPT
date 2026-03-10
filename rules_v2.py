@@ -1,5 +1,6 @@
 from urllib.parse import urlparse
 import re
+import random
 
 
 def infer_section_from_url(url: str) -> str:
@@ -21,7 +22,7 @@ def infer_section_from_url(url: str) -> str:
         "salud": "general",
         "deportes": "deportes",
         "policiales": "policiales",
-        "espectaculos": "general_b",
+        "espectaculos": "espectaculos",
     }
 
     return mapping.get(first, "general")
@@ -98,6 +99,9 @@ def choose_family(section: str, title: str, description: str) -> str:
             return "deportes_b"
 
         return "deportes_a"
+
+    if section == "espectaculos":
+        return random.choice(["espectaculos_a", "espectaculos_b"])
 
     if section == "policiales":
         return "policiales"
