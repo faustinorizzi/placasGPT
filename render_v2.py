@@ -1,4 +1,4 @@
-RENDER_VERSION = "V2-2026-03-10-GENA2-01"
+RENDER_VERSION = "V2-2026-03-10-GENA2-02"
 
 
 def safe_bg_style(
@@ -174,10 +174,10 @@ def build_general_a(title, description, image_data, section_label, logo_data):
 
           .band {{
             position: absolute;
-            top: calc(57% - 1px);
+            top: 57%;
             left: 0;
             right: 0;
-            height: 7px;
+            height: 21px;
             background: #34693A;
             z-index: 5;
           }}
@@ -187,7 +187,7 @@ def build_general_a(title, description, image_data, section_label, logo_data):
             left: 0;
             right: 0;
             bottom: 0;
-            height: 44%;
+            top: calc(57% + 21px);
             background: #0d1f10;
             z-index: 3;
             display: flex;
@@ -356,14 +356,14 @@ def build_general_a2(title, description, image_data, section_label, logo_data):
             bottom: 0;
             left: 0;
             right: 0;
-            height: 7px;
+            height: 21px;
             background: #34693A;
             z-index: 8;
           }}
 
           .overlay {{
             position: absolute;
-            bottom: 7px;
+            bottom: 21px;
             left: 0;
             right: 0;
             height: 58%;
@@ -378,7 +378,7 @@ def build_general_a2(title, description, image_data, section_label, logo_data):
 
           .title {{
             position: absolute;
-            bottom: 175px;
+            bottom: 185px;
             left: 108px;
             right: 108px;
             font-family: 'Passion One', cursive;
