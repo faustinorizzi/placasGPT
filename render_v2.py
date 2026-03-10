@@ -1,4 +1,4 @@
-RENDER_VERSION = "V2-2026-03-10-GENA2-02"
+RENDER_VERSION = "V2-2026-03-10-GENA2-03"
 
 
 def safe_bg_style(
@@ -118,11 +118,6 @@ def build_post_html(
             title, description, image_data, section_label, logo_green_data
         )
 
-    if family == "general_a1":
-        return build_general_a1(
-            title, description, image_data, section_label, logo_white_data
-        )
-
     if family == "general_a2":
         return build_general_a2(
             title, description, image_data, section_label, logo_white_data
@@ -223,93 +218,6 @@ def build_general_a(title, description, image_data, section_label, logo_data):
             <div class="accent"></div>
             <h1 class="title">{title}</h1>
           </div>
-          {logo_html(logo_data)}
-        </div>
-      </body>
-    </html>
-    """
-
-
-# =========================================================
-# GENERAL A-1 — Caja editorial sobre foto
-# =========================================================
-def build_general_a1(title, description, image_data, section_label, logo_data):
-    photo_style = (
-        f"background-image: url('{image_data}');"
-        if image_data
-        else "background: linear-gradient(135deg, #2d572c 0%, #183624 100%);"
-    )
-
-    return f"""
-    <html>
-      <head>
-        <meta charset="utf-8">
-        {global_styles()}
-        <style>
-          .gena1 {{
-            {photo_style}
-            background-size: cover;
-            background-position: center 30%;
-          }}
-
-          .photo {{
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 7px;
-            background: inherit;
-            background-size: cover;
-            background-position: center 30%;
-            z-index: 1;
-          }}
-
-          .b-bottom {{
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 7px;
-            background: #34693A;
-            z-index: 8;
-          }}
-
-          .overlay {{
-            position: absolute;
-            bottom: 7px;
-            left: 0;
-            right: 0;
-            height: 58%;
-            background: linear-gradient(
-              to top,
-              rgba(13,31,16,0.97) 35%,
-              rgba(13,31,16,0.80) 60%,
-              transparent 100%
-            );
-            z-index: 4;
-          }}
-
-          .title {{
-            position: absolute;
-            bottom: 175px;
-            left: 108px;
-            right: 108px;
-            font-family: 'Passion One', cursive;
-            font-size: 64px;
-            font-weight: 700;
-            line-height: 0.96;
-            color: #fff;
-            z-index: 7;
-            letter-spacing: 0.01em;
-          }}
-        </style>
-      </head>
-      <body>
-        <div class="canvas gena1">
-          <div class="photo"></div>
-          <div class="overlay"></div>
-          <div class="b-bottom"></div>
-          <h1 class="title">{title}</h1>
           {logo_html(logo_data)}
         </div>
       </body>
@@ -750,14 +658,14 @@ def build_espectaculos_a(title, description, image_data, section_label_unused, l
             bottom: 0;
             left: 0;
             right: 0;
-            height: 7px;
+            height: 21px;
             background: #5B2346;
             z-index: 8;
           }}
 
           .overlay {{
             position: absolute;
-            bottom: 7px;
+            bottom: 21px;
             left: 0;
             right: 0;
             height: 60%;
@@ -772,7 +680,7 @@ def build_espectaculos_a(title, description, image_data, section_label_unused, l
 
           .title {{
             position: absolute;
-            bottom: 175px;
+            bottom: 185px;
             left: 108px;
             right: 108px;
             font-family: 'Passion One', cursive;
@@ -825,10 +733,10 @@ def build_espectaculos_b(title, description, image_data, section_label_unused, l
             bottom: 216px;
             left: 108px;
             width: 864px;
-            background: #004020;
+            background: #5B2346;
             color: #fff;
             padding: 60px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            box-shadow: 0 8px 40px rgba(0,0,0,0.7), 0 2px 8px rgba(0,0,0,0.5);
             z-index: 20;
           }}
 
@@ -884,18 +792,18 @@ def build_policiales(title, description, image_data, section_label, logo_data):
                 to bottom,
                 rgba(0, 0, 0, 0) 0%,
                 rgba(0, 0, 0, 0) 46%,
-                rgba(0, 0, 0, 0.08) 56%,
-                rgba(0, 0, 0, 0.58) 68%,
-                rgba(0, 0, 0, 0.88) 80%,
-                rgba(0, 0, 0, 0.95) 100%
+                rgba(38, 62, 140, 0.08) 56%,
+                rgba(38, 62, 140, 0.58) 68%,
+                rgba(38, 62, 140, 0.88) 80%,
+                rgba(38, 62, 140, 0.95) 100%
               );
             z-index: 5;
           }}
 
           .title-wrap {{
             position: absolute;
-            left: 56px;
-            right: 40px;
+            left: 108px;
+            right: 108px;
             bottom: 185px;
             z-index: 20;
           }}
