@@ -106,11 +106,9 @@ def choose_family(section: str, title: str, description: str) -> str:
     # General A1: actos institucionales, entregas, inauguraciones
     general_a1_keywords = [
         "entregó", "entrego", "inauguró", "inauguro",
-        "lanzó", "lanzo", "presentó", "presento",
-        "habilitó", "habilito", "firmó", "firmo",
-        "celebró", "celebro", "premió", "premio",
+        "lanzó", "lanzo", "habilitó", "habilito",
+        "firmó", "firmo", "premió", "premio",
         "distinguió", "distinguio", "reconoció", "reconocio",
-        "recibió", "recibio", "visitó", "visito",
     ]
     if any(k in full_text for k in general_a1_keywords):
         return "general_a1"
