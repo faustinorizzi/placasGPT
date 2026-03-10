@@ -1,5 +1,4 @@
 from urllib.parse import urlparse
-import re
 import random
 
 
@@ -11,18 +10,24 @@ def infer_section_from_url(url: str) -> str:
     first = path.split("/")[0].lower()
 
     mapping = {
-        "local": "general",
-        "region": "general",
-        "el-pais": "general",
-        "mundo": "general",
-        "motor": "general",
-        "tecnologia": "general",
-        "educacion": "general",
-        "negocios": "general",
-        "salud": "general",
-        "deportes": "deportes",
-        "policiales": "policiales",
-        "espectaculos": "espectaculos",
+        "deportes":        "deportes",
+        "espectaculos":    "espectaculos",
+        "policiales":      "policiales",
+        "local":           "local",
+        "region":          "region",
+        "educacion":       "educacion",
+        "el-pais":         "el-pais",
+        "mundo":           "mundo",
+        "negocios":        "negocios",
+        "motor":           "motor",
+        "buen-comer":      "buen-comer",
+        "palabra-gremial": "palabra-gremial",
+        "mascotas":        "mascotas",
+        "tecnologia":      "tecnologia",
+        "opinion":         "opinion",
+        "construccion":    "construccion",
+        "de-la-tierra":    "de-la-tierra",
+        "salud":           "salud",
     }
 
     return mapping.get(first, "general")
@@ -31,149 +36,84 @@ def infer_section_from_url(url: str) -> str:
 def display_section_label(url: str) -> str:
     path = urlparse(url).path.strip("/")
     if not path:
-        return "GENERAL"
+        return ""
 
     first = path.split("/")[0].lower()
 
     labels = {
-        "local": "LOCAL",
-        "region": "REGIÓN",
-        "el-pais": "EL PAÍS",
-        "mundo": "MUNDO",
-        "motor": "MOTOR",
-        "tecnologia": "TECNOLOGÍA",
-        "educacion": "EDUCACIÓN",
-        "negocios": "NEGOCIOS",
-        "salud": "SALUD",
-        "deportes": "DEPORTES",
-        "policiales": "POLICIALES",
-        "espectaculos": "ESPECTÁCULOS",
+        "local":           "Local",
+        "region":          "Región",
+        "educacion":       "Educación",
+        "el-pais":         "El País",
+        "mundo":           "Mundo",
+        "negocios":        "Negocios",
+        "motor":           "Motor",
+        "buen-comer":      "Buen Comer",
+        "palabra-gremial": "Palabra Gremial",
+        "mascotas":        "Mascotas",
+        "tecnologia":      "Tecnología",
+        "opinion":         "Opinión",
+        "construccion":    "Construcción",
+        "de-la-tierra":    "De la Tierra",
+        "salud":           "Salud",
+        "deportes":        "Deportes",
+        "espectaculos":    "Espectáculos",
+        "policiales":      "Policiales",
     }
 
-    return labels.get(first, "GENERAL")
-
-
-def has_number(text: str) -> bool:
-    return bool(re.search(r"\d", text or ""))
+    return labels.get(first, "")
 
 
 def choose_family(section: str, title: str, description: str) -> str:
     title = (title or "").strip()
     description = (description or "").strip()
+    full_text = f"{title} {description}".lower()
 
-    title_lower = title.lower()
-    description_lower = description.lower()
-    full_text = f"{title_lower} {description_lower}"
-
+    # --- DEPORTES ---
     if section == "deportes":
-        sports_b_keywords = [
-            "agenda",
-            "programación",
-            "programacion",
-            "tv",
-            "televisa",
-            "televisado",
-            "transmite",
-            "transmisión",
-            "transmision",
-            "árbitro",
-            "arbitro",
-            "árbitros",
-            "arbitros",
-            "horario",
-            "horarios",
-            "cronograma",
-            "fixture",
-            "fecha",
-            "fechas",
-            "hora",
-            "horas",
-            "día",
-            "dias",
-            "días",
-            "cuándo",
-            "cuando",
+        deportes_b_keywords = [
+            "fixture", "horario", "horarios", "programación", "programacion",
+            "agenda", "calendario", "fechas", "tabla", "posiciones",
+            "cuándo", "cuando", "tv", "televisión", "television",
+            "transmisión", "transmision", "transmite",
         ]
-
-        if any(k in full_text for k in sports_b_keywords):
+        if any(k in full_text for k in deportes_b_keywords):
             return "deportes_b"
-
         return "deportes_a"
 
+    # --- ESPECTÁCULOS ---
     if section == "espectaculos":
         return random.choice(["espectaculos_a", "espectaculos_b"])
 
+    # --- POLICIALES ---
     if section == "policiales":
         return "policiales"
 
-    if section == "general_b":
-        return "general_b"
+    # --- GENERAL (todas las demás secciones) ---
 
+    # General B: notas de servicio, convocatoria, agenda
     general_b_keywords = [
-        "invitan", "charla", "curso", "capacitación", "capacitacion",
-        "cortes", "cronograma", "inscripciones", "gratuita", "gratuito",
-        "requisitos", "agenda",
+        "invitan", "inscripción", "inscripciones", "inscribirse",
+        "charla", "curso", "taller", "capacitación", "capacitacion",
+        "jornada", "seminario", "congreso", "conferencia",
+        "gratuito", "gratuita", "gratis",
+        "requisitos", "cronograma", "cortes", "programación",
+        "agenda", "convocatoria", "llamado", "licitación", "licitacion",
     ]
-
-    title_long = len(title) >= 95
-    desc_present = len(description) >= 80
-    has_general_b_keyword = any(k in full_text for k in general_b_keywords)
-
-    if (title_long and has_general_b_keyword) or (has_general_b_keyword and desc_present):
+    if any(k in full_text for k in general_b_keywords):
         return "general_b"
 
-    if len(title) >= 95:
-        return "general_a1"
-
-    return random.choice(["general_a", "general_a2"])
-
-    return random.choice(["general_a", "general_a2"])
-    title_long = len(title) >= 95
-    desc_present = len(description) >= 80
-    has_general_b_keyword = any(k in full_text for k in general_b_keywords)
-
-    if (title_long and has_general_b_keyword) or (has_general_b_keyword and desc_present):
-        return "general_b"
-
+    # General A1: actos institucionales, entregas, inauguraciones
     general_a1_keywords = [
-        "entregó",
-        "entrego",
-        "anunció",
-        "anuncio",
-        "inauguró",
-        "inauguro",
-        "obra",
-        "obras",
-        "plan",
-        "programa",
-        "beneficio",
-        "beneficios",
-        "apertura",
-        "habilitan",
-        "habilitó",
-        "habilito",
-        "lanzó",
-        "lanzo",
-        "lanzamiento",
-        "firmó",
-        "firmo",
-        "firma",
-        "convenio",
-        "licitación",
-        "licitacion",
-        "inversión",
-        "inversion",
-        "millones",
-        "pesos",
-        "subsidio",
-        "subsidios",
-        "financiamiento",
+        "entregó", "entrego", "inauguró", "inauguro",
+        "lanzó", "lanzo", "presentó", "presento",
+        "habilitó", "habilito", "firmó", "firmo",
+        "celebró", "celebro", "premió", "premio",
+        "distinguió", "distinguio", "reconoció", "reconocio",
+        "recibió", "recibio", "visitó", "visito",
     ]
-
-    has_a1_keyword = any(k in full_text for k in general_a1_keywords)
-    has_numeric_signal = has_number(full_text) or "%" in full_text
-
-    if has_a1_keyword or has_numeric_signal:
+    if any(k in full_text for k in general_a1_keywords):
         return "general_a1"
 
-    return "general_a"
+    # General A2: todo lo demás
+    return "general_a2"
