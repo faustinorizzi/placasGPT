@@ -110,20 +110,24 @@ def choose_family(section: str, title: str, description: str) -> str:
         return "general_b"
 
     general_b_keywords = [
-        "invitan",
-        "charla",
-        "curso",
-        "capacitación",
-        "capacitacion",
-        "cortes",
-        "cronograma",
-        "inscripciones",
-        "gratuita",
-        "gratuito",
-        "requisitos",
-        "agenda",
+        "invitan", "charla", "curso", "capacitación", "capacitacion",
+        "cortes", "cronograma", "inscripciones", "gratuita", "gratuito",
+        "requisitos", "agenda",
     ]
 
+    title_long = len(title) >= 95
+    desc_present = len(description) >= 80
+    has_general_b_keyword = any(k in full_text for k in general_b_keywords)
+
+    if (title_long and has_general_b_keyword) or (has_general_b_keyword and desc_present):
+        return "general_b"
+
+    if len(title) >= 95:
+        return "general_a1"
+
+    return random.choice(["general_a", "general_a2"])
+
+    return random.choice(["general_a", "general_a2"])
     title_long = len(title) >= 95
     desc_present = len(description) >= 80
     has_general_b_keyword = any(k in full_text for k in general_b_keywords)
