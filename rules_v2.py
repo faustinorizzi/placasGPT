@@ -91,6 +91,14 @@ def choose_family(section: str, title: str, description: str) -> str:
 
     # --- GENERAL (todas las demás secciones) ---
 
+    # Secciones que van directo a general_a2 sin evaluar keywords
+    general_a2_sections = [
+        "el-pais", "mundo", "opinion", "negocios",
+        "tecnologia", "educacion", "salud",
+    ]
+    if section in general_a2_sections:
+        return "general_a2"
+
     # General B: notas de servicio, convocatoria, agenda
     general_b_keywords = [
         "invitan", "inscripción", "inscripciones", "inscribirse",
