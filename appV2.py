@@ -164,7 +164,7 @@ def extract_main_figure_image(soup: BeautifulSoup) -> str:
 def extract_section_label_from_html(soup: BeautifulSoup, url: str) -> str:
     section = get_meta(soup, prop="article:section")
     if section:
-        return section.strip().upper()
+        return section.strip().title()
     return display_section_label(url)
 
 
