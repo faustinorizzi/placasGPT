@@ -287,8 +287,7 @@ if submitted:
             title=article["title"],
             description=article["description"],
         )
-        st.write(f"DEBUG section: {article['section']} | family: {family}")
-        st.write(f"DEBUG full_text: {article['title']} | {article['description']}")
+        
         html = build_post_html(
             title=article["title"],
             description=article["description"],
