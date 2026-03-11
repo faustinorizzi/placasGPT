@@ -1,4 +1,11 @@
 streamlit
-requests
+feedparser
 beautifulsoup4
+requests
 playwright
+pytest-playwright
+nest_asyncio
+moviepy==1.0.3
+numpy
+Pillow
+yt-dlp
