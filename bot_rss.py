@@ -11,7 +11,7 @@ from bs4 import BeautifulSoup
 from playwright.async_api import async_playwright
 
 from rules_v2 import infer_section_from_url, choose_family, display_section_label
-from render_v2 import build_post_html
+from render_v2 import build_post_html, build_story_html
 
 # --- CONFIG ---
 GROQ_KEY = os.environ["GROQ_KEY"]
@@ -195,18 +195,57 @@ async def generar_placa_feed(titulo, descripcion, img_b64, url):
 
     print(f"  → Familia: {family} | Sección: {section_lbl}")
 
+
+async def generar_placa_story(titulo, img_b64, url):
+    section = infer_section_from_url(url)
+    descripcion = ""
+    family = choose_family(section, titulo, descripcion)
+
+    logo_green = get_logo("logo.png")
+
+    html = build_story_html(
+        title=titulo,
+        image_data=img_b64,
+        family=family,
+        logo_green_data=logo_green,
+    )
+
+    async with async_playwright() as p:
+        browser = await p.chromium.launch(args=["--no-sandbox"])
+        page = await browser.new_page(viewport={"width": 1080, "height": 1920})
+        await page.set_content(html, wait_until="networkidle")
+        await asyncio.sleep(2)
+        await page.screenshot(path="STORY.jpg", type="jpeg", quality=88)
+        await browser.close()
+
+    print(f"  → Story generada")
+
 # --- TELEGRAM ---
 def enviar_telegram(copy_texto):
     try:
-        with open("FEED.jpg", "rb") as f:
-            res = requests.post(
-                f"https://api.telegram.org/bot{TG_TOKEN}/sendPhoto",
-                data={
-                    "chat_id": TG_CHAT_ID,
+        with open("FEED.jpg", "rb") as feed_f, open("STORY.jpg", "rb") as story_f:
+            media = [
+                {
+                    "type": "photo",
+                    "media": "attach://feed",
                     "caption": copy_texto,
                     "parse_mode": "HTML",
                 },
-                files={"photo": f},
+                {
+                    "type": "photo",
+                    "media": "attach://story",
+                },
+            ]
+            res = requests.post(
+                f"https://api.telegram.org/bot{TG_TOKEN}/sendMediaGroup",
+                data={
+                    "chat_id": TG_CHAT_ID,
+                    "media": json.dumps(media),
+                },
+                files={
+                    "feed": feed_f,
+                    "story": story_f,
+                },
                 timeout=30,
             )
         if res.status_code == 200 and res.json().get("ok"):
@@ -262,8 +301,9 @@ async def main():
         # Descripción desde RSS
         descripcion = extraer_descripcion_rss(entry)
 
-        # Generar placa
+        # Generar placas
         await generar_placa_feed(titulo, descripcion, img_b64, link)
+        await generar_placa_story(titulo, img_b64, link)
 
         # Copy con Groq
         texto_noticia = await extraer_texto_noticia(link)

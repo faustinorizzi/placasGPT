@@ -1,4 +1,4 @@
-RENDER_VERSION = "V2-2026-03-10-GENA2-04"
+RENDER_VERSION = "V2-2026-03-11-STORY-01"
 
 
 def safe_bg_style(
@@ -886,6 +886,118 @@ def build_policiales(title, description, image_data, section_label, logo_data):
             <h1 class="title">{title}</h1>
           </div>
           {logo_html(logo_data)}
+        </div>
+      </body>
+    </html>
+    """
+
+
+# =========================================================
+# STORY — Historia 9:16 (1080×1920)
+# =========================================================
+
+STORY_ACCENT_COLORS = {
+    "deportes_a":     "#6DB33F",
+    "deportes_b":     "#6DB33F",
+    "espectaculos_a": "#5B2346",
+    "espectaculos_b": "#5B2346",
+    "policiales":     "#263E8C",
+    "general_a1":     "#34693A",
+    "general_a2":     "#34693A",
+    "general_b":      "#34693A",
+    "general_a":      "#34693A",
+}
+
+
+def build_story_html(
+    title: str,
+    image_data: str,
+    family: str,
+    logo_green_data: str,
+) -> str:
+    title = (title or "").strip()
+    accent = STORY_ACCENT_COLORS.get(family, "#34693A")
+
+    photo_style = (
+        f"background-image: url('{image_data}');"
+        if image_data
+        else f"background: {accent};"
+    )
+
+    logo = ""
+    if logo_green_data:
+        logo = f'<img src="{logo_green_data}" alt="El Periódico" class="story-logo" />'
+
+    return f"""
+    <html>
+      <head>
+        <meta charset="utf-8">
+        <style>
+          @import url('https://fonts.googleapis.com/css2?family=Passion+One:wght@400;700&family=Barlow+Condensed:wght@700&display=swap');
+
+          * {{ margin: 0; padding: 0; box-sizing: border-box; }}
+
+          body {{
+            width: 1080px;
+            height: 1920px;
+            overflow: hidden;
+            background: #f5f2ec;
+          }}
+
+          /* FOTO — 58% superior */
+          .foto {{
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 58%;
+            {photo_style}
+            background-size: cover;
+            background-position: center;
+          }}
+
+          /* Franja horizontal de color entre foto y panel */
+          .acento {{
+            position: absolute;
+            top: 58%;
+            left: 0; right: 0;
+            height: 8px;
+            background: {accent};
+            z-index: 2;
+          }}
+
+          /* Panel inferior */
+          .panel {{
+            position: absolute;
+            top: calc(58% + 8px);
+            left: 0; right: 0; bottom: 0;
+            background: #f5f2ec;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 54px 96px 80px 96px;
+          }}
+
+          .titulo {{
+            font-family: 'Passion One', cursive;
+            font-size: 88px;
+            font-weight: 400;
+            line-height: 0.96;
+            color: #141414;
+          }}
+
+          .story-logo {{
+            display: block;
+            margin-left: auto;
+            width: 280px;
+            height: auto;
+          }}
+        </style>
+      </head>
+      <body>
+        <div class="foto"></div>
+        <div class="acento"></div>
+        <div class="panel">
+          <h1 class="titulo">{title}</h1>
+          {logo}
         </div>
       </body>
     </html>
