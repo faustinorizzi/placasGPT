@@ -694,7 +694,12 @@ with tab1:
                 if st.button("Generar desde RSS"):
                     noticia = opciones_rss[seleccion_rss]
                     img_raw = noticia.enclosures[0].url if hasattr(noticia, "enclosures") and noticia.enclosures else ""
-                    img_data = (url_to_base64(mejorar_resolucion_imagen(img_raw)) if img_raw else "") or (url_to_base64(img_raw) if img_raw else "")
+                    img_data = ""
+                    if img_raw:
+                        try:
+                            img_data = url_to_base64(mejorar_resolucion_imagen(img_raw)) or url_to_base64(img_raw)
+                        except Exception:
+                            img_data = ""
                     section = infer_section_from_url(noticia.link)
                     section_label = display_section_label(noticia.link)
                     family = choose_family(section, noticia.title, "") if familia_rss == "automático" else familia_rss
