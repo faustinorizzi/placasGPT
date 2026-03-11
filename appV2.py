@@ -60,16 +60,38 @@ def file_to_base64(path: str) -> str:
 def url_to_base64(url: str) -> str:
     if not url:
         return ""
-    headers = {"User-Agent": "Mozilla/5.0"}
-    resp = requests.get(url, headers=headers, timeout=25)
-    resp.raise_for_status()
-    ct = resp.headers.get("Content-Type", "").lower()
-    mime = "image/jpeg"
-    if "png" in ct:
-        mime = "image/png"
-    elif "webp" in ct:
-        mime = "image/webp"
-    return f"data:{mime};base64,{base64.b64encode(resp.content).decode()}"
+    try:
+        res = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=15)
+        if res.status_code == 200:
+            ct = res.headers.get("content-type", "").lower()
+            ext = "jpeg"
+            if "png" in ct:
+                ext = "png"
+            elif "webp" in ct:
+                ext = "webp"
+            return f"data:image/{ext};base64,{base64.b64encode(res.content).decode()}"
+    except Exception:
+        pass
+    return ""
+
+
+async def extraer_texto_noticia(url: str) -> str:
+    try:
+        async with async_playwright() as p:
+            browser = await p.chromium.launch(args=["--no-sandbox"])
+            page = await browser.new_page()
+            await page.goto(url, wait_until="domcontentloaded", timeout=15000)
+            await asyncio.sleep(3)
+            html = await page.content()
+            await browser.close()
+        soup = BeautifulSoup(html, "html.parser")
+        for tag in soup(["nav", "footer", "aside", "script", "style", "header"]):
+            tag.decompose()
+        parrafos = soup.find_all("p")
+        texto = " ".join(p.get_text(strip=True) for p in parrafos if len(p.get_text(strip=True)) > 60)
+        return texto[:3000] if len(texto) > 100 else ""
+    except Exception:
+        return ""
 
 
 def mejorar_resolucion_imagen(url: str) -> str:
@@ -172,8 +194,24 @@ def extract_main_figure_image(soup) -> str:
 
 def fetch_article_data(url: str) -> dict:
     headers = {"User-Agent": "Mozilla/5.0"}
-    resp = requests.get(url, headers=headers, timeout=25)
-    resp.raise_for_status()
+    try:
+        resp = requests.get(url, headers=headers, timeout=25)
+        resp.raise_for_status()
+    except requests.exceptions.HTTPError as e:
+        if e.response is not None and e.response.status_code == 429:
+            # Sitio bloqueando — devolver datos mínimos para que la placa igual se genere
+            return {
+                "url": url,
+                "title": url.split("/")[-2].replace("-", " ").title() if "/" in url else "Sin título",
+                "description": "",
+                "image_url": "",
+                "image_data": "",
+                "section": infer_section_from_url(url),
+                "section_label": display_section_label(url),
+                "logo_white_data": file_to_base64("logo_white.png"),
+                "logo_green_data": file_to_base64("logo.png"),
+            }
+        raise
     soup = BeautifulSoup(resp.text, "html.parser")
 
     title = get_meta(soup, prop="og:title") or get_meta(soup, name="title")
@@ -712,7 +750,9 @@ with tab1:
                         feed_bytes, story_bytes = generar_feed_y_story(
                             noticia.title, "", img_data, section_label, family, logo_white, logo_green
                         )
-                        copy = redactar_copy(noticia.title, noticia.link)
+                        loop = asyncio.get_event_loop()
+                        texto_noticia = loop.run_until_complete(extraer_texto_noticia(noticia.link))
+                        copy = redactar_copy(noticia.title, noticia.link, texto_noticia)
 
                     st.session_state["tab1_feed"] = feed_bytes
                     st.session_state["tab1_story"] = story_bytes
@@ -758,7 +798,9 @@ with tab1:
                         article["section_label"], family,
                         article["logo_white_data"], article["logo_green_data"],
                     )
-                    copy = redactar_copy(article["title"], article["url"])
+                    loop = asyncio.get_event_loop()
+                    texto_noticia = loop.run_until_complete(extraer_texto_noticia(url_input.strip()))
+                    copy = redactar_copy(article["title"], article["url"], texto_noticia)
                     st.session_state["tab1_feed"] = feed_bytes
                     st.session_state["tab1_story"] = story_bytes
                     st.session_state["tab1_copy"] = copy
