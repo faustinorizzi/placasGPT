@@ -1,8 +1,11 @@
+import nest_asyncio
+nest_asyncio.apply()
 import streamlit as st
 import requests
 from bs4 import BeautifulSoup
 from pathlib import Path
-from playwright.sync_api import sync_playwright
+import asyncio
+from playwright.async_api import async_playwright
 import tempfile
 import os
 import base64
@@ -221,23 +224,24 @@ def fetch_article_data(url: str) -> dict:
 # ─────────────────────────────────────────────
 # RENDERIZADO
 # ─────────────────────────────────────────────
+async def _html_to_image_async(html: str, width: int, height: int) -> bytes:
+    os.system("playwright install chromium")
+    img_path = f"/tmp/preview_{uuid.uuid4().hex[:8]}.jpg"
+    async with async_playwright() as p:
+        browser = await p.chromium.launch(args=["--no-sandbox", "--disable-dev-shm-usage", "--disable-setuid-sandbox"])
+        page = await browser.new_page(viewport={"width": width, "height": height})
+        await page.set_content(html)
+        await asyncio.sleep(2)
+        await page.screenshot(path=img_path, type="jpeg", quality=88)
+        await browser.close()
+    data = Path(img_path).read_bytes()
+    os.remove(img_path)
+    return data
+
+
 def html_to_image_bytes(html: str, width: int = 1080, height: int = 1350) -> bytes:
-    with tempfile.TemporaryDirectory() as tmpdir:
-        img_path = Path(tmpdir) / "preview.jpg"
-
-        chromium_candidates = ["/usr/bin/chromium", "/usr/bin/chromium-browser"]
-        chromium_path = next((p for p in chromium_candidates if os.path.exists(p)), None)
-
-        with sync_playwright() as p:
-            launch_args = {"headless": True, "args": ["--disable-dev-shm-usage", "--no-sandbox", "--disable-setuid-sandbox"]}
-            browser = p.chromium.launch(executable_path=chromium_path, **launch_args) if chromium_path else p.chromium.launch(**launch_args)
-            page = browser.new_page(viewport={"width": width, "height": height}, device_scale_factor=1)
-            page.set_content(html, wait_until="networkidle")
-            page.wait_for_timeout(2000)
-            page.screenshot(path=str(img_path), type="jpeg", quality=88, full_page=True)
-            browser.close()
-
-        return img_path.read_bytes()
+    loop = asyncio.get_event_loop()
+    return loop.run_until_complete(_html_to_image_async(html, width, height))
 
 
 def generar_feed_y_story(title, description, image_data, section_label, family, logo_white, logo_green):
@@ -507,22 +511,21 @@ def construir_titulo_video_html(titulo: str) -> str:
     """
 
 
+async def _generar_overlay_async(html: str, overlay_path: str):
+    async with async_playwright() as p:
+        browser = await p.chromium.launch(args=["--no-sandbox", "--disable-dev-shm-usage", "--disable-setuid-sandbox"])
+        page = await browser.new_page(viewport={"width": 1080, "height": 1920})
+        await page.set_content(html)
+        await asyncio.sleep(2)
+        await page.screenshot(path=overlay_path, type="png", omit_background=True)
+        await browser.close()
+
+
 def generar_overlay_titulo(titulo: str) -> str:
-    """Genera PNG transparente con el título. Devuelve path."""
     html = construir_titulo_video_html(titulo)
     overlay_path = f"/tmp/overlay_{uuid.uuid4().hex[:8]}.png"
-    with tempfile.TemporaryDirectory() as tmpdir:
-        html_path = Path(tmpdir) / "overlay.html"
-        html_path.write_text(html, encoding="utf-8")
-        chromium_candidates = ["/usr/bin/chromium", "/usr/bin/chromium-browser"]
-        chromium_path = next((p for p in chromium_candidates if os.path.exists(p)), None)
-        with sync_playwright() as p:
-            launch_args = {"headless": True, "args": ["--disable-dev-shm-usage", "--no-sandbox", "--disable-setuid-sandbox"]}
-            browser = p.chromium.launch(executable_path=chromium_path, **launch_args) if chromium_path else p.chromium.launch(**launch_args)
-            page = browser.new_page(viewport={"width": 1080, "height": 1920})
-            page.goto(html_path.as_uri(), wait_until="load")
-            page.screenshot(path=overlay_path, type="png", full_page=True, omit_background=True)
-            browser.close()
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(_generar_overlay_async(html, overlay_path))
     return overlay_path
 
 
