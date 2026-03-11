@@ -642,7 +642,7 @@ def descargar_video_url(url: str) -> str:
         return None
 
 
-def enviar_video_telegram(video_path: str, portada_bytes: bytes, caption: str):
+def enviar_video_telegram(video_path: str, caption: str):
     try:
         with open(video_path, "rb") as vf:
             res = requests.post(
@@ -848,19 +848,13 @@ with tab3:
             submit_v = st.form_submit_button("🎬 Procesar")
 
     with col_vprev:
-        if "tab3_portada" in st.session_state:
-            st.image(st.session_state["tab3_portada"], caption="Portada generada", use_container_width=True)
-            if "tab3_video_path" in st.session_state and os.path.exists(st.session_state["tab3_video_path"]):
-                with open(st.session_state["tab3_video_path"], "rb") as vf:
-                    video_bytes = vf.read()
-                st.video(video_bytes)
-                caption_v = st.text_area("Caption para Telegram", height=100, key="caption_video")
-                if st.button("📤 Enviar Video a Telegram"):
-                    enviar_video_telegram(
-                        st.session_state["tab3_video_path"],
-                        st.session_state["tab3_portada"],
-                        caption_v,
-                    )
+        if "tab3_video_path" in st.session_state and os.path.exists(st.session_state["tab3_video_path"]):
+            with open(st.session_state["tab3_video_path"], "rb") as vf:
+                video_bytes = vf.read()
+            st.video(video_bytes)
+            caption_v = st.text_area("Caption para Telegram", height=100, key="caption_video")
+            if st.button("📤 Enviar Video a Telegram"):
+                enviar_video_telegram(st.session_state["tab3_video_path"], caption_v)
 
     if submit_v:
         if not titulo_v.strip():
@@ -897,7 +891,6 @@ with tab3:
                 if not video_output:
                     st.error("Error al procesar el video.")
                 else:
-                    st.session_state["tab3_portada"] = portada_bytes
                     st.session_state["tab3_video_path"] = video_output
                     st.success("✅ Video procesado.")
                     st.rerun()
