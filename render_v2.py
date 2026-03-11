@@ -1,4 +1,4 @@
-RENDER_VERSION = "V2-2026-03-11-STORY-01"
+RENDER_VERSION = "V2-2026-03-11-GENERAL-B-REFINE-01"
 
 
 def safe_bg_style(
@@ -115,7 +115,7 @@ def build_post_html(
 
     if family == "general_b":
         return build_general_b(
-            title, description, image_data, section_label, logo_green_data
+            title, description, image_data, section_label, logo_white_data
         )
 
     if family == "general_a1":
@@ -139,95 +139,10 @@ def build_post_html(
 
 
 # =========================================================
-# GENERAL A — "Banda que corta"
+# GENERAL A — alias de seguridad (usa la nueva lógica de General B)
 # =========================================================
 def build_general_a(title, description, image_data, section_label, logo_data):
-    photo_style = (
-        f"background-image: url('{image_data}');"
-        if image_data
-        else "background: linear-gradient(135deg, #2d572c 0%, #183624 100%);"
-    )
-
-    return f"""
-    <html>
-      <head>
-        <meta charset="utf-8">
-        {global_styles()}
-        <style>
-          .gena {{
-            {photo_style}
-            background-size: cover;
-            background-position: center top;
-          }}
-
-          .photo-top {{
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 57%;
-            background: inherit;
-            background-size: cover;
-            background-position: center top;
-            z-index: 1;
-          }}
-
-          .band {{
-            position: absolute;
-            top: 57%;
-            left: 0;
-            right: 0;
-            height: 21px;
-            background: #34693A;
-            z-index: 5;
-          }}
-
-          .panel {{
-            position: absolute;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            top: calc(57% + 21px);
-            background: #0d1f10;
-            z-index: 3;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding: 42px 108px 170px 108px;
-          }}
-
-          .accent {{
-            width: 24px;
-            height: 3px;
-            background: #34693A;
-            border-radius: 2px;
-            margin-bottom: 12px;
-            flex-shrink: 0;
-          }}
-
-          .title {{
-            font-family: 'Passion One', cursive;
-            font-size: 64px;
-            font-weight: 700;
-            line-height: 0.96;
-            color: #fff;
-            letter-spacing: 0.01em;
-          }}
-        </style>
-      </head>
-      <body>
-        <div class="canvas gena">
-          <div class="photo-top"></div>
-          <div class="band"></div>
-          <div class="panel">
-            <div class="accent"></div>
-            <h1 class="title">{title}</h1>
-          </div>
-          {logo_html(logo_data)}
-        </div>
-      </body>
-    </html>
-    """
+    return build_general_b(title, description, image_data, section_label, logo_data)
 
 
 # =========================================================
@@ -414,7 +329,11 @@ def build_general_a2(title, description, image_data, section_label, logo_data):
 # GENERAL B
 # =========================================================
 def build_general_b(title, description, image_data, section_label, logo_data):
-    photo_style = f"background-image: url('{image_data}');" if image_data else ""
+    photo_style = (
+        f"background-image: url('{image_data}');"
+        if image_data
+        else "background: linear-gradient(135deg, #2d572c 0%, #183624 100%);"
+    )
 
     return f"""
     <html>
@@ -423,7 +342,7 @@ def build_general_b(title, description, image_data, section_label, logo_data):
         {global_styles()}
         <style>
           .genb {{
-            background: #f5f2ec;
+            background: #22542A;
           }}
 
           .photo {{
@@ -431,33 +350,34 @@ def build_general_b(title, description, image_data, section_label, logo_data):
             top: 0;
             left: 0;
             width: 100%;
-            height: 760px;
+            height: 810px;
             {photo_style}
             background-size: cover;
             background-position: center;
+          }}
+
+          .divider {{
+            position: absolute;
+            top: 810px;
+            left: 0;
+            right: 0;
+            height: 16px;
+            background: #34693A;
+            z-index: 4;
           }}
 
           .panel {{
             position: absolute;
             left: 0;
             right: 0;
+            top: 826px;
             bottom: 0;
-            height: 590px;
-            background: #f5f2ec;
-            padding: 54px 108px 110px 130px;
-          }}
-
-          .franja {{
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 21px;
-            background: #2d572c;
+            background: #22542A;
+            padding: 52px 96px 110px 96px;
           }}
 
           .section-label {{
-            color: #2d572c;
+            color: rgba(255, 255, 255, 0.82);
             margin-bottom: 18px;
           }}
 
@@ -465,7 +385,7 @@ def build_general_b(title, description, image_data, section_label, logo_data):
             font-family: 'Passion One', cursive;
             font-size: 60px;
             line-height: 1.00;
-            color: #141414;
+            color: #fff;
           }}
 
           .brand-logo {{
@@ -477,8 +397,8 @@ def build_general_b(title, description, image_data, section_label, logo_data):
       <body>
         <div class="canvas genb">
           <div class="photo"></div>
+          <div class="divider"></div>
           <div class="panel">
-            <div class="franja"></div>
             <div class="section-label">{section_label}</div>
             <h1 class="title">{title}</h1>
             {logo_html(logo_data)}
@@ -552,13 +472,13 @@ def build_deportes_a(title, description, image_data, section_label_unused, logo_
           }}
 
           .hl-txt {{
-            color: #6DB33F;
+            color: #009FB7;
           }}
 
           .hl-bg {{
             display: inline;
             color: #fff;
-            background: #6DB33F;
+            background: #009FB7;
             padding: 3px 10px 1px 10px;
             box-decoration-break: clone;
             -webkit-box-decoration-break: clone;
@@ -631,7 +551,7 @@ def build_deportes_b(title, description, image_data, section_label_unused, logo_
             height: 590px;
             background: #efede8;
             padding: 64px 56px 110px 56px;
-            border-top: 16px solid #6DB33F;
+            border-top: 16px solid #009FB7;
           }}
 
           .inner {{
@@ -650,7 +570,7 @@ def build_deportes_b(title, description, image_data, section_label_unused, logo_
           .highlight {{
             display: inline;
             color: #fff;
-            background: #6DB33F;
+            background: #009FB7;
             padding: 0px 4px 0 4px;
             box-decoration-break: clone;
             -webkit-box-decoration-break: clone;
@@ -897,8 +817,8 @@ def build_policiales(title, description, image_data, section_label, logo_data):
 # =========================================================
 
 STORY_ACCENT_COLORS = {
-    "deportes_a":     "#6DB33F",
-    "deportes_b":     "#6DB33F",
+    "deportes_a":     "#009FB7",
+    "deportes_b":     "#009FB7",
     "espectaculos_a": "#5B2346",
     "espectaculos_b": "#5B2346",
     "policiales":     "#263E8C",
@@ -959,7 +879,7 @@ def build_story_html(
             position: absolute;
             top: 58%;
             left: 0; right: 0;
-            height: 20px;
+            height: 16px;
             background: {accent};
             z-index: 2;
           }}
@@ -967,7 +887,7 @@ def build_story_html(
           /* Panel inferior */
           .panel {{
             position: absolute;
-            top: calc(58% + 8px);
+            top: calc(58% + 16px);
             left: 0; right: 0; bottom: 0;
             background: #f5f2ec;
             display: flex;
