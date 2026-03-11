@@ -223,9 +223,7 @@ def fetch_article_data(url: str) -> dict:
 # ─────────────────────────────────────────────
 def html_to_image_bytes(html: str, width: int = 1080, height: int = 1350) -> bytes:
     with tempfile.TemporaryDirectory() as tmpdir:
-        html_path = Path(tmpdir) / "preview.html"
         img_path = Path(tmpdir) / "preview.jpg"
-        html_path.write_text(html, encoding="utf-8")
 
         chromium_candidates = ["/usr/bin/chromium", "/usr/bin/chromium-browser"]
         chromium_path = next((p for p in chromium_candidates if os.path.exists(p)), None)
@@ -234,7 +232,8 @@ def html_to_image_bytes(html: str, width: int = 1080, height: int = 1350) -> byt
             launch_args = {"headless": True, "args": ["--disable-dev-shm-usage", "--no-sandbox", "--disable-setuid-sandbox"]}
             browser = p.chromium.launch(executable_path=chromium_path, **launch_args) if chromium_path else p.chromium.launch(**launch_args)
             page = browser.new_page(viewport={"width": width, "height": height}, device_scale_factor=1)
-            page.goto(html_path.as_uri(), wait_until="load")
+            page.set_content(html, wait_until="networkidle")
+            page.wait_for_timeout(2000)
             page.screenshot(path=str(img_path), type="jpeg", quality=88, full_page=True)
             browser.close()
 
