@@ -27,7 +27,6 @@ RSS_URL = "https://el-periodico.com.ar/rss.xml"
 
 FAMILIAS = [
     "automático",
-    "general_a2",
     "general_a1",
     "general_b",
     "deportes_a",

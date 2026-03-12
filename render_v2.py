@@ -133,6 +133,11 @@ def build_post_html(
             title, description, image_data, section_label, logo_white_data
         )
 
+    if family == "general_a":
+        return build_general_a(
+            title, description, image_data, section_label, logo_white_data
+        )
+
     return build_general_a(
         title, description, image_data, section_label, logo_white_data
     )
@@ -421,7 +426,15 @@ def build_deportes_a(title, description, image_data, section_label_unused, logo_
     title_html = title.upper()
     if ":" in title:
         left, right = title.upper().split(":", 1)
-        title_html = f'<span class="hl-bg">{left.strip()}:</span> {right.strip()}'
+        if len(left.strip()) <= 40:
+            title_html = f'<span class="hl-bg">{left.strip()}:</span> {right.strip()}'
+        else:
+            words = title.upper().split()
+            if len(words) >= 4:
+                title_html = (
+                    f'<span class="hl-txt">{" ".join(words[:2])}</span> '
+                    f'{" ".join(words[2:])}'
+                )
     else:
         words = title.upper().split()
         if len(words) >= 4:
@@ -510,7 +523,15 @@ def build_deportes_b(title, description, image_data, section_label_unused, logo_
     title_html = title
     if ":" in title:
         left, right = title.split(":", 1)
-        title_html = f'<span class="highlight">{left.strip()}:</span> {right.strip()}'
+        if len(left.strip()) <= 40:
+            title_html = f'<span class="highlight">{left.strip()}:</span> {right.strip()}'
+        else:
+            words = title.split()
+            if len(words) >= 4:
+                title_html = (
+                    f'<span class="highlight">{" ".join(words[:3])}</span> '
+                    f'{" ".join(words[3:])}'
+                )
     else:
         words = title.split()
         if len(words) >= 4:
@@ -895,7 +916,7 @@ def build_story_html(
           /* Panel inferior */
           .panel {{
             position: absolute;
-            top: calc(58% + 8px);
+            top: calc(58% + 20px);
             left: 0; right: 0; bottom: 0;
             background: #f5f2ec;
             display: flex;
