@@ -448,7 +448,7 @@ def build_deportes_a(title, description, image_data, section_label_unused, logo_
             right: 0;
             bottom: 0;
             min-height: 410px;
-            padding: 200px 56px 135px 56px;
+            padding: 200px 108px 135px 108px;
             background: rgba(16, 52, 39, 0.97);
             clip-path: polygon(0 26%, 100% 12%, 100% 100%, 0 100%);
             z-index: 10;
@@ -547,14 +547,14 @@ def build_deportes_b(title, description, image_data, section_label_unused, logo_
             bottom: 0;
             height: 590px;
             background: #efede8;
-            padding: 64px 56px 110px 56px;
+            padding: 64px 108px 110px 108px;
             border-top: 16px solid #6DB33F;
           }}
 
           .inner {{
             position: relative;
-            margin-left: 8px;
-            margin-right: 28px;
+            margin-left: 0px;
+            margin-right: 0px;
           }}
 
           .title {{
