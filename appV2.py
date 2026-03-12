@@ -677,8 +677,7 @@ def descargar_video_url(url: str) -> str:
         }) as ydl:
             ydl.download([url])
         return output_path if os.path.exists(output_path) else None
-    except Exception as e:
-        st.error(f"yt_dlp error: {str(e)}")
+    except Exception: 
         return None
 
 
