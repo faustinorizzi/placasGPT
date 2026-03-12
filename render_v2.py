@@ -1,4 +1,4 @@
-RENDER_VERSION = "V2-2026"
+RENDER_VERSION = "V2-2026-03-11-FIXED-12-3"
 
 
 def safe_bg_style(
@@ -147,6 +147,7 @@ def build_post_html(
 # GENERAL A — Panel oscuro
 # =========================================================
 def build_general_a(title, description, image_data, section_label, logo_data):
+    font_size = 60 if len(title) > 100 else 72
     photo_style = (
         f"background-image: url('{image_data}');"
         if image_data
@@ -201,7 +202,7 @@ def build_general_a(title, description, image_data, section_label, logo_data):
 
           .title {{
             font-family: 'Passion One', cursive;
-            font-size: 60px;
+            font-size: {font_size}px;
             line-height: 1.00;
             color: #fff;
             max-width: 864px;
@@ -334,6 +335,7 @@ def build_general_a2(title, description, image_data, section_label, logo_data):
 # GENERAL B
 # =========================================================
 def build_general_b(title, description, image_data, section_label, logo_data):
+    font_size = 60 if len(title) > 100 else 72
     photo_style = f"background-image: url('{image_data}');" if image_data else ""
 
     return f"""
@@ -384,7 +386,7 @@ def build_general_b(title, description, image_data, section_label, logo_data):
 
           .title {{
             font-family: 'Passion One', cursive;
-            font-size: 60px;
+            font-size: {font_size}px;
             line-height: 1.00;
             color: #141414;
             max-width: 864px;
@@ -518,6 +520,7 @@ def build_deportes_a(title, description, image_data, section_label_unused, logo_
 # DEPORTES B
 # =========================================================
 def build_deportes_b(title, description, image_data, section_label_unused, logo_data):
+    font_size = 60 if len(title) > 100 else 72
     photo_style = f"background-image: url('{image_data}');" if image_data else ""
 
     title_html = title
@@ -580,7 +583,7 @@ def build_deportes_b(title, description, image_data, section_label_unused, logo_
 
           .title {{
             font-family: 'Passion One', cursive;
-            font-size: 64px;
+            font-size: {font_size}px;
             line-height: 0.99;
             color: #111;
           }}
@@ -619,6 +622,7 @@ def build_deportes_b(title, description, image_data, section_label_unused, logo_
 # ESPECTÁCULOS A — Panel claro ciruela
 # =========================================================
 def build_espectaculos_a(title, description, image_data, section_label_unused, logo_data):
+    font_size = 60 if len(title) > 100 else 72
     photo_style = (
         f"background-image: url('{image_data}');"
         if image_data
@@ -673,7 +677,7 @@ def build_espectaculos_a(title, description, image_data, section_label_unused, l
 
           .title {{
             font-family: 'Passion One', cursive;
-            font-size: 60px;
+            font-size: {font_size}px;
             line-height: 1.00;
             color: #141414;
             max-width: 864px;
@@ -760,6 +764,7 @@ def build_espectaculos_b(title, description, image_data, section_label_unused, l
 # POLICIALES
 # =========================================================
 def build_policiales(title, description, image_data, section_label, logo_data):
+    font_size = 60 if len(title) > 100 else 72
     photo_style = (
         f"background-image: url('{image_data}');"
         if image_data
@@ -814,7 +819,7 @@ def build_policiales(title, description, image_data, section_label, logo_data):
 
           .title {{
             font-family: 'Passion One', cursive;
-            font-size: 60px;
+            font-size: {font_size}px;
             line-height: 1.00;
             color: #fff;
             max-width: 864px;
