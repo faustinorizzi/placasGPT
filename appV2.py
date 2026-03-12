@@ -27,6 +27,7 @@ RSS_URL = "https://el-periodico.com.ar/rss.xml"
 
 FAMILIAS = [
     "automático",
+    "general_a",
     "general_a1",
     "general_b",
     "deportes_a",
@@ -677,7 +678,7 @@ def descargar_video_url(url: str) -> str:
         }) as ydl:
             ydl.download([url])
         return output_path if os.path.exists(output_path) else None
-    except Exception: 
+    except Exception:
         return None
 
 
