@@ -409,7 +409,6 @@ def build_general_b(title, description, image_data, section_label, logo_data):
 # =========================================================
 # DEPORTES A
 # =========================================================
-print("DEPORTES A image_data OK:", bool(image_data), str(image_data)[:80] if image_data else "VACIO")
 def build_deportes_a(title, description, image_data, section_label_unused, logo_data):
     bg = safe_bg_style(
         image_data,
@@ -430,6 +429,7 @@ def build_deportes_a(title, description, image_data, section_label_unused, logo_
                 f'<span class="hl-txt">{" ".join(words[:2])}</span> '
                 f'{" ".join(words[2:])}'
             )
+    print("DEPORTES A image_data OK:", bool(image_data), str(image_data)[:80] if image_data else "VACIO")
 
     return f"""
     <html>
