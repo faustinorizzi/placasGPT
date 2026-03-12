@@ -89,9 +89,7 @@ def choose_family(section: str, title: str, description: str) -> str:
     if section == "policiales":
         return "policiales"
 
-    # --- GENERAL (todas las demás secciones) ---
-
-    # Secciones que van directo a General A sin evaluar keywords
+    # --- GENERAL ---
     general_a_sections = [
         "el-pais", "mundo", "opinion", "negocios",
         "tecnologia", "educacion", "salud",
@@ -99,7 +97,6 @@ def choose_family(section: str, title: str, description: str) -> str:
     if section in general_a_sections:
         return "general_a"
 
-    # General B: notas de servicio, convocatoria, agenda
     general_b_keywords = [
         "invitan", "inscripción", "inscripciones", "inscribirse",
         "charla", "curso", "taller", "capacitación", "capacitacion",
@@ -111,7 +108,6 @@ def choose_family(section: str, title: str, description: str) -> str:
     if any(k in full_text for k in general_b_keywords):
         return "general_b"
 
-    # General A1: actos institucionales, entregas, inauguraciones
     general_a1_keywords = [
         "entregó", "entrego", "inauguró", "inauguro",
         "lanzó", "lanzo", "habilitó", "habilito",
@@ -121,5 +117,4 @@ def choose_family(section: str, title: str, description: str) -> str:
     if any(k in full_text for k in general_a1_keywords):
         return "general_a1"
 
-    # General A: todo lo demás
     return "general_a"
