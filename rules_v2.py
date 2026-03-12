@@ -78,8 +78,8 @@ def choose_family(section: str, title: str, description: str) -> str:
             "transmisión", "transmision", "transmite",
         ]
         if any(k in full_text for k in deportes_b_keywords):
-            return "deportes_a"
-        return "deportes_b"
+            return "deportes_b"
+        return "deportes_a"
 
     # --- ESPECTÁCULOS ---
     if section == "espectaculos":
@@ -91,12 +91,12 @@ def choose_family(section: str, title: str, description: str) -> str:
 
     # --- GENERAL (todas las demás secciones) ---
 
-    # Secciones que van directo a general_a sin evaluar keywords
-    general_a2_sections = [
+    # Secciones que van directo a General A sin evaluar keywords
+    general_a_sections = [
         "el-pais", "mundo", "opinion", "negocios",
         "tecnologia", "educacion", "salud",
     ]
-    if section in general_a2_sections:
+    if section in general_a_sections:
         return "general_a"
 
     # General B: notas de servicio, convocatoria, agenda

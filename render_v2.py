@@ -1,4 +1,4 @@
-RENDER_VERSION = "V2-2026-03-11-GENERAL-A-B-REWORK-02"
+RENDER_VERSION = "V2-2026-03-11-STORY-01"
 
 
 def safe_bg_style(
@@ -95,12 +95,12 @@ def build_post_html(
 
     if family == "deportes_a":
         return build_deportes_a(
-            title, description, image_data, section_label, logo_green_data
+            title, description, image_data, section_label, logo_white_data
         )
 
     if family == "deportes_b":
         return build_deportes_b(
-            title, description, image_data, section_label, logo_white_data
+            title, description, image_data, section_label, logo_green_data
         )
 
     if family == "espectaculos_a":
@@ -124,7 +124,7 @@ def build_post_html(
         )
 
     if family == "general_a2":
-        return build_general_a(
+        return build_general_a2(
             title, description, image_data, section_label, logo_white_data
         )
 
@@ -139,7 +139,7 @@ def build_post_html(
 
 
 # =========================================================
-# GENERAL A — Foto + línea divisoria + panel oscuro
+# GENERAL A — "Banda que corta"
 # =========================================================
 def build_general_a(title, description, image_data, section_label, logo_data):
     photo_style = (
@@ -155,27 +155,31 @@ def build_general_a(title, description, image_data, section_label, logo_data):
         {global_styles()}
         <style>
           .gena {{
-            background: #22542A;
+            {photo_style}
+            background-size: cover;
+            background-position: center top;
           }}
 
-          .photo {{
+          .photo-top {{
             position: absolute;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 810px;
-            {photo_style}
+            right: 0;
+            height: 57%;
+            background: inherit;
             background-size: cover;
-            background-position: center;
+            background-position: center top;
+            z-index: 1;
           }}
 
-          .divider {{
+          .band {{
             position: absolute;
-            top: 810px;
+            top: 57%;
             left: 0;
             right: 0;
-            height: 20px;
+            height: 21px;
             background: #34693A;
+            z-index: 5;
           }}
 
           .panel {{
@@ -183,38 +187,43 @@ def build_general_a(title, description, image_data, section_label, logo_data):
             left: 0;
             right: 0;
             bottom: 0;
-            top: 830px;
-            background: #22542A;
-            padding: 56px 96px 110px 96px;
+            top: calc(57% + 21px);
+            background: #0d1f10;
+            z-index: 3;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 42px 108px 170px 108px;
           }}
 
-          .section-label {{
-            color: rgba(255,255,255,0.82);
-            margin-bottom: 18px;
+          .accent {{
+            width: 24px;
+            height: 3px;
+            background: #34693A;
+            border-radius: 2px;
+            margin-bottom: 12px;
+            flex-shrink: 0;
           }}
 
           .title {{
             font-family: 'Passion One', cursive;
-            font-size: 60px;
-            line-height: 1.00;
+            font-size: 64px;
+            font-weight: 700;
+            line-height: 0.96;
             color: #fff;
-          }}
-
-          .brand-logo {{
-            width: 220px;
-            bottom: 38px;
+            letter-spacing: 0.01em;
           }}
         </style>
       </head>
       <body>
         <div class="canvas gena">
-          <div class="photo"></div>
-          <div class="divider"></div>
+          <div class="photo-top"></div>
+          <div class="band"></div>
           <div class="panel">
-            <div class="section-label">{section_label}</div>
+            <div class="accent"></div>
             <h1 class="title">{title}</h1>
-            {logo_html(logo_data)}
           </div>
+          {logo_html(logo_data)}
         </div>
       </body>
     </html>
@@ -315,10 +324,90 @@ def build_general_a1(title, description, image_data, section_label, logo_data):
 
 
 # =========================================================
-# GENERAL A-2 — Eliminada (alias temporal a General A)
+# GENERAL A-2 — "Solo borde inferior"
 # =========================================================
 def build_general_a2(title, description, image_data, section_label, logo_data):
-    return build_general_a(title, description, image_data, section_label, logo_data)
+    photo_style = (
+        f"background-image: url('{image_data}');"
+        if image_data
+        else "background: linear-gradient(135deg, #2d572c 0%, #183624 100%);"
+    )
+
+    return f"""
+    <html>
+      <head>
+        <meta charset="utf-8">
+        {global_styles()}
+        <style>
+          .gena2 {{
+            {photo_style}
+            background-size: cover;
+            background-position: center 30%;
+          }}
+
+          .photo {{
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 7px;
+            background: inherit;
+            background-size: cover;
+            background-position: center 30%;
+            z-index: 1;
+          }}
+
+          .b-bottom {{
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 21px;
+            background: #34693A;
+            z-index: 8;
+          }}
+
+          .overlay {{
+            position: absolute;
+            bottom: 21px;
+            left: 0;
+            right: 0;
+            height: 58%;
+            background: linear-gradient(
+              to top,
+              rgba(13,31,16,0.97) 35%,
+              rgba(13,31,16,0.80) 60%,
+              transparent 100%
+            );
+            z-index: 4;
+          }}
+
+          .title {{
+            position: absolute;
+            bottom: 185px;
+            left: 108px;
+            right: 108px;
+            font-family: 'Passion One', cursive;
+            font-size: 64px;
+            font-weight: 700;
+            line-height: 0.96;
+            color: #fff;
+            z-index: 7;
+            letter-spacing: 0.01em;
+          }}
+        </style>
+      </head>
+      <body>
+        <div class="canvas gena2">
+          <div class="photo"></div>
+          <div class="overlay"></div>
+          <div class="b-bottom"></div>
+          <h1 class="title">{title}</h1>
+          {logo_html(logo_data)}
+        </div>
+      </body>
+    </html>
+    """
 
 
 # =========================================================
@@ -362,7 +451,7 @@ def build_general_b(title, description, image_data, section_label, logo_data):
             left: 0;
             right: 0;
             bottom: 0;
-            top: 780px;
+            height: 570px;
             background: #f5f2ec;
             padding: 54px 108px 110px 108px;
           }}
@@ -404,108 +493,6 @@ def build_general_b(title, description, image_data, section_label, logo_data):
 # DEPORTES A
 # =========================================================
 def build_deportes_a(title, description, image_data, section_label_unused, logo_data):
-    photo_style = f"background-image: url('{image_data}');" if image_data else ""
-
-    title_html = title
-    if ":" in title:
-        left, right = title.split(":", 1)
-        title_html = f'<span class="highlight">{left.strip()}:</span> {right.strip()}'
-    else:
-        words = title.split()
-        if len(words) >= 4:
-            title_html = (
-                f'<span class="highlight">{" ".join(words[:3])}</span> '
-                f'{" ".join(words[3:])}'
-            )
-
-    return f"""
-    <html>
-      <head>
-        <meta charset="utf-8">
-        {global_styles()}
-        <style>
-          .depa {{
-            background: #efede8;
-          }}
-
-          .photo {{
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 760px;
-            {photo_style}
-            background-size: cover;
-            background-position: center;
-          }}
-
-          .divider {{
-            position: absolute;
-            top: 760px;
-            left: 0;
-            right: 0;
-            height: 20px;
-            background: #6DB33F;
-          }}
-
-          .panel {{
-            position: absolute;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            top: 780px;
-            background: #efede8;
-            padding: 64px 56px 110px 56px;
-          }}
-
-          .inner {{
-            position: relative;
-            margin-left: 8px;
-            margin-right: 28px;
-          }}
-
-          .title {{
-            font-family: 'Passion One', cursive;
-            font-size: 64px;
-            line-height: 0.99;
-            color: #111;
-          }}
-
-          .highlight {{
-            display: inline;
-            color: #fff;
-            background: #6DB33F;
-            padding: 0px 4px 0 4px;
-            box-decoration-break: clone;
-            -webkit-box-decoration-break: clone;
-          }}
-
-          .brand-logo {{
-            width: 220px;
-            bottom: 38px;
-          }}
-        </style>
-      </head>
-      <body>
-        <div class="canvas depa">
-          <div class="photo"></div>
-          <div class="divider"></div>
-          <div class="panel">
-            <div class="inner">
-              <h1 class="title">{title_html}</h1>
-            </div>
-            {logo_html(logo_data)}
-          </div>
-        </div>
-      </body>
-    </html>
-    """
-
-
-# =========================================================
-# DEPORTES B
-# =========================================================
-def build_deportes_b(title, description, image_data, section_label_unused, logo_data):
     bg = safe_bg_style(
         image_data,
         "rgba(8, 22, 17, 0.02)",
@@ -532,7 +519,7 @@ def build_deportes_b(title, description, image_data, section_label_unused, logo_
         <meta charset="utf-8">
         {global_styles()}
         <style>
-          .depb {{
+          .depa {{
             {bg}
             background-size: cover;
             background-position: center;
@@ -584,7 +571,7 @@ def build_deportes_b(title, description, image_data, section_label_unused, logo_
         </style>
       </head>
       <body>
-        <div class="canvas depb">
+        <div class="canvas depa">
           <div class="footer-block">
             <div class="inner">
               <h1 class="title">{title_html}</h1>
@@ -598,14 +585,103 @@ def build_deportes_b(title, description, image_data, section_label_unused, logo_
 
 
 # =========================================================
-# ESPECTÁCULOS A
+# DEPORTES B
+# =========================================================
+def build_deportes_b(title, description, image_data, section_label_unused, logo_data):
+    photo_style = f"background-image: url('{image_data}');" if image_data else ""
+
+    title_html = title
+    if ":" in title:
+        left, right = title.split(":", 1)
+        title_html = f'<span class="highlight">{left.strip()}:</span> {right.strip()}'
+    else:
+        words = title.split()
+        if len(words) >= 4:
+            title_html = (
+                f'<span class="highlight">{" ".join(words[:3])}</span> '
+                f'{" ".join(words[3:])}'
+            )
+
+    return f"""
+    <html>
+      <head>
+        <meta charset="utf-8">
+        {global_styles()}
+        <style>
+          .depb {{
+            background: #efede8;
+          }}
+
+          .photo {{
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 760px;
+            {photo_style}
+            background-size: cover;
+            background-position: center;
+          }}
+
+          .panel {{
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 590px;
+            background: #efede8;
+            padding: 64px 56px 110px 56px;
+            border-top: 16px solid #6DB33F;
+          }}
+
+          .inner {{
+            position: relative;
+            margin-left: 8px;
+            margin-right: 28px;
+          }}
+
+          .title {{
+            font-family: 'Passion One', cursive;
+            font-size: 64px;
+            line-height: 0.99;
+            color: #111;
+          }}
+
+          .highlight {{
+            display: inline;
+            color: #fff;
+            background: #6DB33F;
+            padding: 0px 4px 0 4px;
+            box-decoration-break: clone;
+            -webkit-box-decoration-break: clone;
+          }}
+
+          .brand-logo {{
+            width: 220px;
+            bottom: 38px;
+          }}
+        </style>
+      </head>
+      <body>
+        <div class="canvas depb">
+          <div class="photo"></div>
+          <div class="panel">
+            <div class="inner">
+              <h1 class="title">{title_html}</h1>
+            </div>
+            {logo_html(logo_data)}
+          </div>
+        </div>
+      </body>
+    </html>
+    """
+
+
+# =========================================================
+# ESPECTÁCULOS A — Panel claro + franja ciruela
 # =========================================================
 def build_espectaculos_a(title, description, image_data, section_label_unused, logo_data):
-    photo_style = (
-        f"background-image: url('{image_data}');"
-        if image_data
-        else "background: linear-gradient(135deg, #5B2346 0%, #2a1121 100%);"
-    )
+    photo_style = f"background-image: url('{image_data}');" if image_data else ""
 
     return f"""
     <html>
@@ -614,7 +690,7 @@ def build_espectaculos_a(title, description, image_data, section_label_unused, l
         {global_styles()}
         <style>
           .espa {{
-            background: #5B2346;
+            background: #f5f2ec;
           }}
 
           .photo {{
@@ -622,15 +698,15 @@ def build_espectaculos_a(title, description, image_data, section_label_unused, l
             top: 0;
             left: 0;
             width: 100%;
-            height: 810px;
+            height: 760px;
             {photo_style}
             background-size: cover;
-            background-position: center 30%;
+            background-position: center;
           }}
 
           .divider {{
             position: absolute;
-            top: 810px;
+            top: 760px;
             left: 0;
             right: 0;
             height: 20px;
@@ -642,16 +718,16 @@ def build_espectaculos_a(title, description, image_data, section_label_unused, l
             left: 0;
             right: 0;
             bottom: 0;
-            top: 830px;
-            background: #22542A;
-            padding: 56px 96px 110px 96px;
+            height: 570px;
+            background: #f5f2ec;
+            padding: 54px 108px 110px 108px;
           }}
 
           .title {{
             font-family: 'Passion One', cursive;
             font-size: 60px;
             line-height: 1.00;
-            color: #fff;
+            color: #141414;
           }}
 
           .brand-logo {{
@@ -747,7 +823,7 @@ def build_policiales(title, description, image_data, section_label, logo_data):
         {global_styles()}
         <style>
           .pol {{
-            background: #263E8C;
+            background: #16295F;
           }}
 
           .photo {{
@@ -776,8 +852,13 @@ def build_policiales(title, description, image_data, section_label, logo_data):
             right: 0;
             bottom: 0;
             top: 830px;
-            background: #22542A;
+            background: #16295F;
             padding: 56px 96px 110px 96px;
+          }}
+
+          .section-label {{
+            color: rgba(255,255,255,0.82);
+            margin-bottom: 18px;
           }}
 
           .title {{
@@ -798,6 +879,7 @@ def build_policiales(title, description, image_data, section_label, logo_data):
           <div class="photo"></div>
           <div class="divider"></div>
           <div class="panel">
+            <div class="section-label">{section_label}</div>
             <h1 class="title">{title}</h1>
             {logo_html(logo_data)}
           </div>
@@ -874,7 +956,7 @@ def build_story_html(
             position: absolute;
             top: 58%;
             left: 0; right: 0;
-            height: 16px;
+            height: 8px;
             background: {accent};
             z-index: 2;
           }}
@@ -882,7 +964,7 @@ def build_story_html(
           /* Panel inferior */
           .panel {{
             position: absolute;
-            top: calc(58% + 16px);
+            top: calc(58% + 8px);
             left: 0; right: 0; bottom: 0;
             background: #f5f2ec;
             display: flex;
