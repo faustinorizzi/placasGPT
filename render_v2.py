@@ -1,6 +1,5 @@
 RENDER_VERSION = "V2-2026-03-11-FIX-URGENT-01"
 
-
 def safe_bg_style(
     image_data: str,
     overlay_top: str,
