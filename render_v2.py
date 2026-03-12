@@ -429,7 +429,6 @@ def build_deportes_a(title, description, image_data, section_label_unused, logo_
                 f'<span class="hl-txt">{" ".join(words[:2])}</span> '
                 f'{" ".join(words[2:])}'
             )
-    print("DEPORTES A image_data OK:", bool(image_data), str(image_data)[:80] if image_data else "VACIO")
 
     return f"""
     <html>
