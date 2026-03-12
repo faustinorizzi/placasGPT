@@ -873,10 +873,218 @@ def build_story_html(
         else f"background: {accent};"
     )
 
-    logo = ""
+    logo_green = ""
     if logo_green_data:
-        logo = f'<img src="{logo_green_data}" alt="El Periódico" class="story-logo" />'
+        logo_green = f'<img src="{logo_green_data}" alt="El Periódico" class="story-logo" />'
 
+    # ── DEPORTES ──────────────────────────────────────────────
+    if family in ("deportes_a", "deportes_b"):
+        words = title.upper().split()
+        if len(words) >= 4:
+            title_html = (
+                f'<span class="hl-txt">{" ".join(words[:2])}</span> '
+                f'{" ".join(words[2:])}'
+            )
+        else:
+            title_html = title.upper()
+
+        return f"""
+    <html>
+      <head>
+        <meta charset="utf-8">
+        <style>
+          @import url('https://fonts.googleapis.com/css2?family=Passion+One:wght@400;700&family=Barlow+Condensed:wght@700&display=swap');
+          * {{ margin: 0; padding: 0; box-sizing: border-box; }}
+          body {{ width: 1080px; height: 1920px; overflow: hidden; }}
+
+          .canvas {{
+            width: 1080px; height: 1920px;
+            position: relative;
+            {photo_style}
+            background-size: cover;
+            background-position: center;
+          }}
+
+          .footer-block {{
+            position: absolute;
+            left: 0; right: 0; bottom: 0;
+            min-height: 640px;
+            padding: 280px 108px 120px 108px;
+            background: rgba(16, 52, 39, 0.97);
+            clip-path: polygon(0 68%, 100% 58%, 100% 100%, 0 100%);
+            z-index: 10;
+          }}
+
+          .titulo {{
+            font-family: 'Passion One', cursive;
+            font-size: 88px;
+            font-weight: 400;
+            line-height: 0.95;
+            color: #fff;
+            text-transform: uppercase;
+          }}
+
+          .hl-txt {{ color: #6DB33F; }}
+
+          .story-logo {{
+            position: absolute;
+            bottom: 80px;
+            right: 108px;
+            width: 280px;
+            height: auto;
+            z-index: 20;
+            filter: brightness(0) invert(1);
+          }}
+        </style>
+      </head>
+      <body>
+        <div class="canvas">
+          <div class="footer-block">
+            <h1 class="titulo">{title_html}</h1>
+          </div>
+          {logo_green}
+        </div>
+      </body>
+    </html>
+    """
+
+    # ── POLICIALES ────────────────────────────────────────────
+    if family == "policiales":
+        return f"""
+    <html>
+      <head>
+        <meta charset="utf-8">
+        <style>
+          @import url('https://fonts.googleapis.com/css2?family=Passion+One:wght@400;700&family=Barlow+Condensed:wght@700&display=swap');
+          * {{ margin: 0; padding: 0; box-sizing: border-box; }}
+          body {{ width: 1080px; height: 1920px; overflow: hidden; background: #16295F; }}
+
+          .foto {{
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: calc(67% - 20px);
+            {photo_style}
+            background-size: cover;
+            background-position: center;
+          }}
+
+          .divider {{
+            position: absolute;
+            top: 67%;
+            left: 0; right: 0;
+            height: 20px;
+            background: #263E8C;
+            z-index: 5;
+          }}
+
+          .panel {{
+            position: absolute;
+            top: calc(67% + 20px);
+            left: 0; right: 0; bottom: 0;
+            background: #16295F;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 54px 108px 80px 108px;
+          }}
+
+          .titulo {{
+            font-family: 'Passion One', cursive;
+            font-size: 88px;
+            font-weight: 400;
+            line-height: 0.96;
+            color: #fff;
+          }}
+
+          .story-logo {{
+            display: block;
+            margin-left: auto;
+            width: 280px;
+            height: auto;
+            filter: brightness(0) invert(1);
+          }}
+        </style>
+      </head>
+      <body>
+        <div class="foto"></div>
+        <div class="divider"></div>
+        <div class="panel">
+          <h1 class="titulo">{title}</h1>
+          {logo_green}
+        </div>
+      </body>
+    </html>
+    """
+
+    # ── ESPECTÁCULOS ──────────────────────────────────────────
+    if family in ("espectaculos_a", "espectaculos_b"):
+        return f"""
+    <html>
+      <head>
+        <meta charset="utf-8">
+        <style>
+          @import url('https://fonts.googleapis.com/css2?family=Passion+One:wght@400;700&family=Barlow+Condensed:wght@700&display=swap');
+          * {{ margin: 0; padding: 0; box-sizing: border-box; }}
+          body {{ width: 1080px; height: 1920px; overflow: hidden; }}
+
+          .canvas {{
+            width: 1080px; height: 1920px;
+            position: relative;
+            {photo_style}
+            background-size: cover;
+            background-position: center;
+          }}
+
+          .overlay {{
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.04), rgba(0,0,0,0.22));
+            z-index: 2;
+          }}
+
+          .title-box {{
+            position: absolute;
+            bottom: 307px;
+            left: 108px;
+            right: 108px;
+            background: #5B2346;
+            padding: 85px;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.7), 0 2px 8px rgba(0,0,0,0.5);
+            z-index: 20;
+          }}
+
+          .titulo {{
+            font-family: 'Passion One', cursive;
+            font-size: 88px;
+            font-weight: 400;
+            line-height: 0.96;
+            color: #fff;
+            text-transform: uppercase;
+          }}
+
+          .story-logo {{
+            position: absolute;
+            bottom: 80px;
+            right: 108px;
+            width: 280px;
+            height: auto;
+            z-index: 20;
+          }}
+        </style>
+      </head>
+      <body>
+        <div class="canvas">
+          <div class="overlay"></div>
+          <div class="title-box">
+            <h1 class="titulo">{title}</h1>
+          </div>
+          {logo_green}
+        </div>
+      </body>
+    </html>
+    """
+
+    # ── GENERAL (fallback) ────────────────────────────────────
     return f"""
     <html>
       <head>
@@ -893,7 +1101,6 @@ def build_story_html(
             background: #f5f2ec;
           }}
 
-          /* FOTO — 58% superior */
           .foto {{
             position: absolute;
             top: 0; left: 0; right: 0;
@@ -903,7 +1110,6 @@ def build_story_html(
             background-position: center;
           }}
 
-          /* Franja horizontal de color entre foto y panel */
           .acento {{
             position: absolute;
             top: 58%;
@@ -913,7 +1119,6 @@ def build_story_html(
             z-index: 2;
           }}
 
-          /* Panel inferior */
           .panel {{
             position: absolute;
             top: calc(58% + 20px);
@@ -946,7 +1151,7 @@ def build_story_html(
         <div class="acento"></div>
         <div class="panel">
           <h1 class="titulo">{title}</h1>
-          {logo}
+          {logo_green}
         </div>
       </body>
     </html>
