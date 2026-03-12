@@ -887,7 +887,7 @@ def build_story_html(
             position: absolute;
             top: 58%;
             left: 0; right: 0;
-            height: 8px;
+            height: 20px;
             background: {accent};
             z-index: 2;
           }}
