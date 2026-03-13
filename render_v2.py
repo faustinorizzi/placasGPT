@@ -1,4 +1,4 @@
-RENDER_VERSION = "V2-2026-03-11-FIXED-13-3"
+RENDER_VERSION = "V2-2026-03-11-FIXED-13-3b"
 
 
 def safe_bg_style(
@@ -51,17 +51,17 @@ def global_styles() -> str:
         left: 50%;
         transform: translateX(-50%);
         bottom: 50px;
-        width: 220px;
+        width: 240px;
         height: auto;
         z-index: 60;
       }
 
       .section-label {
         font-family: 'Barlow Condensed', sans-serif;
-        font-size: 30px;
+        font-size: 36px;
         font-weight: 800;
         line-height: 1;
-        letter-spacing: 0.3px;
+        letter-spacing: 0.5px;
         text-transform: uppercase;
       }
 
