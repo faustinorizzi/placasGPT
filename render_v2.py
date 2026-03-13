@@ -884,7 +884,7 @@ def build_story_html(
 
     # ── DEPORTES ──────────────────────────────────────────────
     if family in ("deportes_a", "deportes_b"):
-        font_size_story = 52 if len(title) > 100 else 62
+        font_size_story = 62 
         words = title.upper().split()
         if len(words) >= 4:
             title_html = (
@@ -971,7 +971,7 @@ def build_story_html(
 
     # ── POLICIALES ────────────────────────────────────────────
     if family == "policiales":
-        font_size_story = 52 if len(title) > 100 else 62
+        font_size_story = 62
         return f"""
     <html>
       <head>
@@ -984,7 +984,7 @@ def build_story_html(
           .foto {{
             position: absolute;
             top: 0; left: 0; right: 0;
-            height: 67%;
+            height: 58%;
             {photo_style}
             background-size: cover;
             background-position: center;
@@ -992,7 +992,7 @@ def build_story_html(
 
           .divider {{
             position: absolute;
-            top: 67%;
+            top: 58%;
             left: 0; right: 0;
             height: 20px;
             background: #263E8C;
@@ -1001,7 +1001,7 @@ def build_story_html(
 
           .panel {{
             position: absolute;
-            top: calc(67% + 20px);
+            top: calc(58% + 20px);
             left: 0; right: 0; bottom: 0;
             background: #16295F;
             display: flex;
@@ -1040,7 +1040,7 @@ def build_story_html(
 
     # ── ESPECTÁCULOS ──────────────────────────────────────────
     if family in ("espectaculos_a", "espectaculos_b"):
-        font_size_story = 52 if len(title) > 100 else 62
+        font_size_story = 62
         return f"""
     <html>
       <head>
@@ -1108,7 +1108,7 @@ def build_story_html(
     """
 
     # ── GENERAL (fallback) ────────────────────────────────────
-    font_size_story = 52 if len(title) > 100 else 62
+    font_size_story = 62
     return f"""
     <html>
       <head>
