@@ -884,10 +884,11 @@ def build_story_html(
 
     # ── DEPORTES ──────────────────────────────────────────────
     if family in ("deportes_a", "deportes_b"):
+        font_size_story = 52 if len(title) > 100 else 62
         words = title.upper().split()
         if len(words) >= 4:
             title_html = (
-                f'<span class="hl-txt">{" ".join(words[:2])}</span> '
+                f'<span class="hl-bg">{" ".join(words[:2])}</span> '
                 f'{" ".join(words[2:])}'
             )
         else:
@@ -900,53 +901,68 @@ def build_story_html(
         <style>
           @import url('https://fonts.googleapis.com/css2?family=Passion+One:wght@400;700&family=Barlow+Condensed:wght@700&display=swap');
           * {{ margin: 0; padding: 0; box-sizing: border-box; }}
-          body {{ width: 1080px; height: 1920px; overflow: hidden; }}
+          body {{ width: 1080px; height: 1920px; overflow: hidden; background: #f5f2ec; }}
 
-          .canvas {{
-            width: 1080px; height: 1920px;
-            position: relative;
+          .foto {{
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 58%;
             {photo_style}
             background-size: cover;
             background-position: center;
           }}
 
-          .footer-block {{
+          .acento {{
             position: absolute;
+            top: 58%;
+            left: 0; right: 0;
+            height: 20px;
+            background: #6DB33F;
+            z-index: 2;
+          }}
+
+          .panel {{
+            position: absolute;
+            top: calc(58% + 20px);
             left: 0; right: 0; bottom: 0;
-            min-height: 640px;
-            padding: 280px 108px 120px 108px;
-            background: rgba(16, 52, 39, 0.97);
-            clip-path: polygon(0 68%, 100% 58%, 100% 100%, 0 100%);
-            z-index: 10;
+            background: #f5f2ec;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 54px 96px 80px 96px;
           }}
 
           .titulo {{
             font-family: 'Passion One', cursive;
-            font-size: 88px;
+            font-size: {font_size_story}px;
             font-weight: 400;
-            line-height: 0.95;
-            color: #fff;
+            line-height: 0.96;
+            color: #141414;
             text-transform: uppercase;
           }}
 
-          .hl-txt {{ color: #6DB33F; }}
+          .hl-bg {{
+            display: inline;
+            color: #fff;
+            background: #6DB33F;
+            padding: 3px 10px 1px 10px;
+            box-decoration-break: clone;
+            -webkit-box-decoration-break: clone;
+          }}
 
           .story-logo {{
-            position: absolute;
-            bottom: 80px;
-            right: 108px;
+            display: block;
+            margin-left: auto;
             width: 280px;
             height: auto;
-            z-index: 20;
-            filter: brightness(0) invert(1);
           }}
         </style>
       </head>
       <body>
-        <div class="canvas">
-          <div class="footer-block">
-            <h1 class="titulo">{title_html}</h1>
-          </div>
+        <div class="foto"></div>
+        <div class="acento"></div>
+        <div class="panel">
+          <h1 class="titulo">{title_html}</h1>
           {logo_green}
         </div>
       </body>
@@ -955,6 +971,7 @@ def build_story_html(
 
     # ── POLICIALES ────────────────────────────────────────────
     if family == "policiales":
+        font_size_story = 52 if len(title) > 100 else 62
         return f"""
     <html>
       <head>
@@ -995,7 +1012,7 @@ def build_story_html(
 
           .titulo {{
             font-family: 'Passion One', cursive;
-            font-size: 88px;
+            font-size: {font_size_story}px;
             font-weight: 400;
             line-height: 0.96;
             color: #fff;
@@ -1023,6 +1040,7 @@ def build_story_html(
 
     # ── ESPECTÁCULOS ──────────────────────────────────────────
     if family in ("espectaculos_a", "espectaculos_b"):
+        font_size_story = 52 if len(title) > 100 else 62
         return f"""
     <html>
       <head>
@@ -1049,18 +1067,18 @@ def build_story_html(
 
           .title-box {{
             position: absolute;
-            bottom: 307px;
+            bottom: 420px;
             left: 108px;
             right: 108px;
             background: #5B2346;
-            padding: 85px;
+            padding: 40px;
             box-shadow: 0 8px 40px rgba(0,0,0,0.7), 0 2px 8px rgba(0,0,0,0.5);
             z-index: 20;
           }}
 
           .titulo {{
             font-family: 'Passion One', cursive;
-            font-size: 88px;
+            font-size: {font_size_story}px;
             font-weight: 400;
             line-height: 0.96;
             color: #fff;
@@ -1090,6 +1108,7 @@ def build_story_html(
     """
 
     # ── GENERAL (fallback) ────────────────────────────────────
+    font_size_story = 52 if len(title) > 100 else 62
     return f"""
     <html>
       <head>
@@ -1137,7 +1156,7 @@ def build_story_html(
 
           .titulo {{
             font-family: 'Passion One', cursive;
-            font-size: 88px;
+            font-size: {font_size_story}px;
             font-weight: 400;
             line-height: 0.96;
             color: #141414;
