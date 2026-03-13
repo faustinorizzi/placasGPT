@@ -777,7 +777,7 @@ def build_policiales(title, description, image_data, section_label, logo_data):
         {global_styles()}
         <style>
           .pol {{
-            background: #16295F;
+            background: #2B2B2B;
           }}
 
           .photo {{
@@ -797,7 +797,7 @@ def build_policiales(title, description, image_data, section_label, logo_data):
             left: 0;
             right: 0;
             height: 20px;
-            background: #263E8C;
+            background: #555555;
             z-index: 5;
           }}
 
@@ -807,7 +807,7 @@ def build_policiales(title, description, image_data, section_label, logo_data):
             right: 0;
             bottom: 0;
             height: 590px;
-            background: #16295F;
+            background: #2B2B2B;
             padding: 54px 108px 110px 108px;
           }}
 
@@ -854,7 +854,7 @@ STORY_ACCENT_COLORS = {
     "deportes_b":     "#6DB33F",
     "espectaculos_a": "#5B2346",
     "espectaculos_b": "#5B2346",
-    "policiales":     "#263E8C",
+    "policiales":     "#555555",
     "general_a1":     "#34693A",
     "general_a2":     "#34693A",
     "general_b":      "#34693A",
@@ -978,7 +978,7 @@ def build_story_html(
         <style>
           @import url('https://fonts.googleapis.com/css2?family=Passion+One:wght@400;700&family=Barlow+Condensed:wght@700&display=swap');
           * {{ margin: 0; padding: 0; box-sizing: border-box; }}
-          body {{ width: 1080px; height: 1920px; overflow: hidden; background: #16295F; }}
+          body {{ width: 1080px; height: 1920px; overflow: hidden; background: #2B2B2B; }}
 
           .foto {{
             position: absolute;
@@ -994,7 +994,7 @@ def build_story_html(
             top: 58%;
             left: 0; right: 0;
             height: 20px;
-            background: #263E8C;
+            background: #555555;
             z-index: 5;
           }}
 
@@ -1002,7 +1002,7 @@ def build_story_html(
             position: absolute;
             top: calc(58% + 20px);
             left: 0; right: 0; bottom: 0;
-            background: #16295F;
+            background: #2B2B2B;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
