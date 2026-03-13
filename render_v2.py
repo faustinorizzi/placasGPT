@@ -1,4 +1,4 @@
-RENDER_VERSION = "V2-2026-123b"
+RENDER_VERSION = "V2-2026-03-11-FIXED-12-3"
 
 
 def safe_bg_style(
@@ -429,7 +429,7 @@ def build_deportes_a(title, description, image_data, section_label_unused, logo_
     if ":" in title:
         left, right = title.upper().split(":", 1)
         if len(left.strip()) <= 40:
-            title_html = f'<span class="hl-bg">{left.strip()}:</span> {right.strip()}'
+            title_html = f'<span class="hl-txt">{left.strip()}:</span> {right.strip()}'
         else:
             words = title.upper().split()
             if len(words) >= 4:
@@ -984,7 +984,7 @@ def build_story_html(
           .foto {{
             position: absolute;
             top: 0; left: 0; right: 0;
-            height: calc(67% - 20px);
+            height: 67%;
             {photo_style}
             background-size: cover;
             background-position: center;
