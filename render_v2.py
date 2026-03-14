@@ -190,7 +190,7 @@ def build_general_a(title, description, image_data, section_label, logo_data):
             left: 0;
             top: 0;
             width: 35px;
-            bottom: 50%;
+            bottom: 60%;
             background: rgba(255,255,255,0.35);
             z-index: 3;
           }}
@@ -200,7 +200,7 @@ def build_general_a(title, description, image_data, section_label, logo_data):
             left: 0;
             bottom: 0;
             width: 35px;
-            height: 50%;
+            height: 40%;
             background: #34693A;
             z-index: 3;
           }}
