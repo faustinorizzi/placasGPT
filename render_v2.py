@@ -305,7 +305,7 @@ def build_general_a1(title, description, image_data, section_label, logo_data):
             bottom: 185px;
             background: #f5f2ec;
             border-left: 10px solid #34693A;
-            border-top: 3px solid #34693A;
+            border-top: 4px solid #34693A;
             border-right: none;
             border-bottom: none;
             border-radius: 0 8px 8px 0;
