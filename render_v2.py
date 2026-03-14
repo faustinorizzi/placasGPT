@@ -1,4 +1,5 @@
-RENDER_VERSION = "V2-2026-03-11-FIXED-13-3C"
+RENDER_VERSION = "V2-2026-03-11-FIXED-12-3"
+
 
 def safe_bg_style(
     image_data: str,
@@ -50,17 +51,17 @@ def global_styles() -> str:
         left: 50%;
         transform: translateX(-50%);
         bottom: 50px;
-        width: 240px;
+        width: 220px;
         height: auto;
         z-index: 60;
       }
 
       .section-label {
         font-family: 'Barlow Condensed', sans-serif;
-        font-size: 36px;
+        font-size: 30px;
         font-weight: 800;
         line-height: 1;
-        letter-spacing: 0.5px;
+        letter-spacing: 0.3px;
         text-transform: uppercase;
       }
 
@@ -150,7 +151,7 @@ def build_general_a(title, description, image_data, section_label, logo_data):
     photo_style = (
         f"background-image: url('{image_data}');"
         if image_data
-        else "background: linear-gradient(135deg, #2d572c 0%, #183624 100%);"
+        else "background: linear-gradient(135deg, #1a1a1a 0%, #333 100%);"
     )
 
     return f"""
@@ -160,68 +161,87 @@ def build_general_a(title, description, image_data, section_label, logo_data):
         {global_styles()}
         <style>
           .gena {{
-            background: #22542A;
+            background: #111;
           }}
 
           .photo {{
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 740px;
+            inset: 0;
             {photo_style}
             background-size: cover;
             background-position: center;
           }}
 
-          .divider {{
+          .gradient {{
             position: absolute;
-            top: 740px;
-            left: 0;
-            right: 0;
-            height: 20px;
-            background: #34693A;
-            z-index: 5;
+            inset: 0;
+            background: linear-gradient(
+              to bottom,
+              rgba(0,0,0,0) 0%,
+              rgba(0,0,0,0) 35%,
+              rgba(0,0,0,0.55) 60%,
+              rgba(0,0,0,0.88) 100%
+            );
+            z-index: 2;
           }}
 
-          .panel {{
+          .franja-superior {{
             position: absolute;
             left: 0;
-            right: 0;
+            top: 0;
+            width: 20px;
+            bottom: 320px;
+            background: rgba(255,255,255,0.35);
+            z-index: 3;
+          }}
+
+          .franja-inferior {{
+            position: absolute;
+            left: 0;
             bottom: 0;
-            height: 590px;
-            background: #22542A;
-            padding: 54px 108px 110px 108px;
+            width: 20px;
+            height: 320px;
+            background: #34693A;
+            z-index: 3;
+          }}
+
+          .content {{
+            position: absolute;
+            left: 108px;
+            right: 108px;
+            bottom: 120px;
+            z-index: 10;
           }}
 
           .section-label {{
-            color: rgba(255,255,255,0.82);
+            color: #34693A;
             margin-bottom: 18px;
           }}
 
           .title {{
             font-family: 'Passion One', cursive;
             font-size: {font_size}px;
-            line-height: 1.00;
+            line-height: 0.97;
             color: #fff;
-            max-width: 864px;
           }}
 
           .brand-logo {{
-            width: 220px;
-            bottom: 38px;
+            bottom: 50px;
+            filter: brightness(0) invert(1);
           }}
         </style>
       </head>
       <body>
         <div class="canvas gena">
           <div class="photo"></div>
-          <div class="divider"></div>
-          <div class="panel">
+          <div class="gradient"></div>
+          <div class="franja-superior"></div>
+          <div class="franja-inferior"></div>
+          <div class="content">
             <div class="section-label">{section_label}</div>
             <h1 class="title">{title}</h1>
-            {logo_html(logo_data)}
           </div>
+          {logo_html(logo_data)}
         </div>
       </body>
     </html>
@@ -777,7 +797,7 @@ def build_policiales(title, description, image_data, section_label, logo_data):
         {global_styles()}
         <style>
           .pol {{
-            background: #2B2B2B;
+            background: #16295F;
           }}
 
           .photo {{
@@ -797,7 +817,7 @@ def build_policiales(title, description, image_data, section_label, logo_data):
             left: 0;
             right: 0;
             height: 20px;
-            background: #555555;
+            background: #263E8C;
             z-index: 5;
           }}
 
@@ -807,7 +827,7 @@ def build_policiales(title, description, image_data, section_label, logo_data):
             right: 0;
             bottom: 0;
             height: 590px;
-            background: #2B2B2B;
+            background: #16295F;
             padding: 54px 108px 110px 108px;
           }}
 
@@ -854,7 +874,7 @@ STORY_ACCENT_COLORS = {
     "deportes_b":     "#6DB33F",
     "espectaculos_a": "#5B2346",
     "espectaculos_b": "#5B2346",
-    "policiales":     "#555555",
+    "policiales":     "#263E8C",
     "general_a1":     "#34693A",
     "general_a2":     "#34693A",
     "general_b":      "#34693A",
@@ -883,7 +903,7 @@ def build_story_html(
 
     # ── DEPORTES ──────────────────────────────────────────────
     if family in ("deportes_a", "deportes_b"):
-        font_size_story = 62 
+        font_size_story = 52 if len(title) > 100 else 62
         words = title.upper().split()
         if len(words) >= 4:
             title_html = (
@@ -970,7 +990,7 @@ def build_story_html(
 
     # ── POLICIALES ────────────────────────────────────────────
     if family == "policiales":
-        font_size_story = 62
+        font_size_story = 52 if len(title) > 100 else 62
         return f"""
     <html>
       <head>
@@ -978,12 +998,12 @@ def build_story_html(
         <style>
           @import url('https://fonts.googleapis.com/css2?family=Passion+One:wght@400;700&family=Barlow+Condensed:wght@700&display=swap');
           * {{ margin: 0; padding: 0; box-sizing: border-box; }}
-          body {{ width: 1080px; height: 1920px; overflow: hidden; background: #2B2B2B; }}
+          body {{ width: 1080px; height: 1920px; overflow: hidden; background: #16295F; }}
 
           .foto {{
             position: absolute;
             top: 0; left: 0; right: 0;
-            height: 58%;
+            height: 67%;
             {photo_style}
             background-size: cover;
             background-position: center;
@@ -991,18 +1011,18 @@ def build_story_html(
 
           .divider {{
             position: absolute;
-            top: 58%;
+            top: 67%;
             left: 0; right: 0;
             height: 20px;
-            background: #555555;
+            background: #263E8C;
             z-index: 5;
           }}
 
           .panel {{
             position: absolute;
-            top: calc(58% + 20px);
+            top: calc(67% + 20px);
             left: 0; right: 0; bottom: 0;
-            background: #2B2B2B;
+            background: #16295F;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -1039,7 +1059,7 @@ def build_story_html(
 
     # ── ESPECTÁCULOS ──────────────────────────────────────────
     if family in ("espectaculos_a", "espectaculos_b"):
-        font_size_story = 62
+        font_size_story = 52 if len(title) > 100 else 62
         return f"""
     <html>
       <head>
@@ -1107,7 +1127,7 @@ def build_story_html(
     """
 
     # ── GENERAL (fallback) ────────────────────────────────────
-    font_size_story = 62
+    font_size_story = 52 if len(title) > 100 else 62
     return f"""
     <html>
       <head>
