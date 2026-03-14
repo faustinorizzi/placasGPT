@@ -918,9 +918,55 @@ def build_story_html(
     if logo_green_data:
         logo_green = f'<img src="{logo_green_data}" alt="El Periódico" class="story-logo" />'
 
+    # ── SHARED BASE STYLES ────────────────────────────────────
+    base_imports = """
+          @import url('https://fonts.googleapis.com/css2?family=Passion+One:wght@400;700&family=Barlow+Condensed:wght@700&display=swap');
+          * { margin: 0; padding: 0; box-sizing: border-box; }
+          body { width: 1080px; height: 1920px; overflow: hidden; }
+
+          .foto {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 58%;
+            background-size: cover;
+            background-position: center;
+          }
+
+          .acento {
+            position: absolute;
+            top: 58%; left: 0; right: 0;
+            height: 20px;
+            z-index: 2;
+          }
+
+          .panel {
+            position: absolute;
+            top: calc(58% + 20px);
+            left: 0; right: 0; bottom: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 54px 96px 80px 96px;
+          }
+
+          .titulo {
+            font-family: 'Passion One', cursive;
+            font-weight: 400;
+            line-height: 0.96;
+          }
+
+          .story-logo {
+            display: block;
+            margin: 0 auto;
+            width: 280px;
+            height: auto;
+          }
+    """
+
+    font_size_story = 56 if len(title) > 100 else 64
+
     # ── DEPORTES ──────────────────────────────────────────────
     if family in ("deportes_a", "deportes_b"):
-        font_size_story = 56 if len(title) > 100 else 64
         words = title.upper().split()
         if len(words) >= 4:
             title_html = (
@@ -935,48 +981,16 @@ def build_story_html(
       <head>
         <meta charset="utf-8">
         <style>
-          @import url('https://fonts.googleapis.com/css2?family=Passion+One:wght@400;700&family=Barlow+Condensed:wght@700&display=swap');
-          * {{ margin: 0; padding: 0; box-sizing: border-box; }}
-          body {{ width: 1080px; height: 1920px; overflow: hidden; background: #f5f2ec; }}
-
-          .foto {{
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 58%;
-            {photo_style}
-            background-size: cover;
-            background-position: center;
-          }}
-
-          .acento {{
-            position: absolute;
-            top: 58%;
-            left: 0; right: 0;
-            height: 20px;
-            background: #6DB33F;
-            z-index: 2;
-          }}
-
-          .panel {{
-            position: absolute;
-            top: calc(58% + 20px);
-            left: 0; right: 0; bottom: 0;
-            background: #f5f2ec;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 54px 96px 80px 96px;
-          }}
-
+          {base_imports}
+          body {{ background: #f5f2ec; }}
+          .foto {{ {photo_style} }}
+          .acento {{ background: #6DB33F; }}
+          .panel {{ background: #f5f2ec; }}
           .titulo {{
-            font-family: 'Passion One', cursive;
             font-size: {font_size_story}px;
-            font-weight: 400;
-            line-height: 0.96;
             color: #141414;
             text-transform: uppercase;
           }}
-
           .hl-bg {{
             display: inline;
             color: #fff;
@@ -984,13 +998,6 @@ def build_story_html(
             padding: 3px 10px 1px 10px;
             box-decoration-break: clone;
             -webkit-box-decoration-break: clone;
-          }}
-
-          .story-logo {{
-            display: block;
-            margin-left: auto;
-            width: 280px;
-            height: auto;
           }}
         </style>
       </head>
@@ -1007,65 +1014,26 @@ def build_story_html(
 
     # ── POLICIALES ────────────────────────────────────────────
     if family == "policiales":
-        font_size_story = 56 if len(title) > 100 else 64
         return f"""
     <html>
       <head>
         <meta charset="utf-8">
         <style>
-          @import url('https://fonts.googleapis.com/css2?family=Passion+One:wght@400;700&family=Barlow+Condensed:wght@700&display=swap');
-          * {{ margin: 0; padding: 0; box-sizing: border-box; }}
-          body {{ width: 1080px; height: 1920px; overflow: hidden; background: #16295F; }}
-
-          .foto {{
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 67%;
-            {photo_style}
-            background-size: cover;
-            background-position: center;
-          }}
-
-          .divider {{
-            position: absolute;
-            top: 67%;
-            left: 0; right: 0;
-            height: 20px;
-            background: #777777;
-            z-index: 5;
-          }}
-
-          .panel {{
-            position: absolute;
-            top: calc(67% + 20px);
-            left: 0; right: 0; bottom: 0;
-            background: #2B2B2B;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 54px 108px 80px 108px;
-          }}
-
+          {base_imports}
+          body {{ background: #2B2B2B; }}
+          .foto {{ {photo_style} }}
+          .acento {{ background: #777777; }}
+          .panel {{ background: #2B2B2B; }}
           .titulo {{
-            font-family: 'Passion One', cursive;
             font-size: {font_size_story}px;
-            font-weight: 400;
-            line-height: 0.96;
             color: #fff;
           }}
-
-          .story-logo {{
-            display: block;
-            margin-left: auto;
-            width: 280px;
-            height: auto;
-            filter: brightness(0) invert(1);
-          }}
+          .story-logo {{ filter: brightness(0) invert(1); }}
         </style>
       </head>
       <body>
         <div class="foto"></div>
-        <div class="divider"></div>
+        <div class="acento"></div>
         <div class="panel">
           <h1 class="titulo">{title}</h1>
           {logo_green}
@@ -1076,31 +1044,23 @@ def build_story_html(
 
     # ── ESPECTÁCULOS ──────────────────────────────────────────
     if family in ("espectaculos_a", "espectaculos_b"):
-        font_size_story = 56 if len(title) > 100 else 64
         return f"""
     <html>
       <head>
         <meta charset="utf-8">
         <style>
-          @import url('https://fonts.googleapis.com/css2?family=Passion+One:wght@400;700&family=Barlow+Condensed:wght@700&display=swap');
-          * {{ margin: 0; padding: 0; box-sizing: border-box; }}
-          body {{ width: 1080px; height: 1920px; overflow: hidden; }}
-
-          .canvas {{
-            width: 1080px; height: 1920px;
-            position: relative;
+          {base_imports}
+          body {{
             {photo_style}
             background-size: cover;
             background-position: center;
           }}
-
           .overlay {{
             position: absolute;
             inset: 0;
             background: linear-gradient(to bottom, rgba(0,0,0,0.04), rgba(0,0,0,0.22));
             z-index: 2;
           }}
-
           .title-box {{
             position: absolute;
             bottom: 420px;
@@ -1111,20 +1071,16 @@ def build_story_html(
             box-shadow: 0 8px 40px rgba(0,0,0,0.7), 0 2px 8px rgba(0,0,0,0.5);
             z-index: 20;
           }}
-
           .titulo {{
-            font-family: 'Passion One', cursive;
             font-size: {font_size_story}px;
-            font-weight: 400;
-            line-height: 0.96;
             color: #fff;
             text-transform: uppercase;
           }}
-
           .story-logo {{
             position: absolute;
             bottom: 80px;
-            right: 108px;
+            left: 50%;
+            transform: translateX(-50%);
             width: 280px;
             height: auto;
             z-index: 20;
@@ -1132,77 +1088,29 @@ def build_story_html(
         </style>
       </head>
       <body>
-        <div class="canvas">
-          <div class="overlay"></div>
-          <div class="title-box">
-            <h1 class="titulo">{title}</h1>
-          </div>
-          {logo_green}
+        <div class="overlay"></div>
+        <div class="title-box">
+          <h1 class="titulo">{title}</h1>
         </div>
+        {logo_green}
       </body>
     </html>
     """
 
     # ── GENERAL (fallback) ────────────────────────────────────
-    font_size_story = 56 if len(title) > 100 else 64
     return f"""
     <html>
       <head>
         <meta charset="utf-8">
         <style>
-          @import url('https://fonts.googleapis.com/css2?family=Passion+One:wght@400;700&family=Barlow+Condensed:wght@700&display=swap');
-
-          * {{ margin: 0; padding: 0; box-sizing: border-box; }}
-
-          body {{
-            width: 1080px;
-            height: 1920px;
-            overflow: hidden;
-            background: #f5f2ec;
-          }}
-
-          .foto {{
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 58%;
-            {photo_style}
-            background-size: cover;
-            background-position: center;
-          }}
-
-          .acento {{
-            position: absolute;
-            top: 58%;
-            left: 0; right: 0;
-            height: 20px;
-            background: {accent};
-            z-index: 2;
-          }}
-
-          .panel {{
-            position: absolute;
-            top: calc(58% + 20px);
-            left: 0; right: 0; bottom: 0;
-            background: #f5f2ec;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 54px 96px 80px 96px;
-          }}
-
+          {base_imports}
+          body {{ background: #f5f2ec; }}
+          .foto {{ {photo_style} }}
+          .acento {{ background: {accent}; }}
+          .panel {{ background: #f5f2ec; }}
           .titulo {{
-            font-family: 'Passion One', cursive;
             font-size: {font_size_story}px;
-            font-weight: 400;
-            line-height: 0.96;
             color: #141414;
-          }}
-
-          .story-logo {{
-            display: block;
-            margin-left: auto;
-            width: 280px;
-            height: auto;
           }}
         </style>
       </head>
