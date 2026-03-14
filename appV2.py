@@ -15,7 +15,7 @@ import uuid
 import feedparser
 
 from rules_v2 import infer_section_from_url, choose_family, display_section_label
-from render_v2 import build_post_html, build_story_html, RENDER_VERSION
+from render_v2 import build_post_html, build_story_html, RENDER_VERSION, build_carrusel_capsulas, build_carrusel_imagen, build_carrusel_cierre
 
 
 st.set_page_config(page_title="El Periódico — Panel V2", layout="wide")
@@ -706,7 +706,7 @@ st.title("El Periódico · Panel V2")
 st.caption("Laboratorio de diseño — separado del sistema productivo")
 st.info(f"Render: **{RENDER_VERSION}**")
 
-tab1, tab2, tab3 = st.tabs(["🔗 URL / RSS", "📝 Carga Manual", "🎬 Video"])
+tab1, tab2, tab3, tab4 = st.tabs(["🔗 URL / RSS", "📝 Carga Manual", "🎬 Video", "🎠 Carrusel"])
 
 
 # ─────────────────────────────────────────────
@@ -943,3 +943,466 @@ with tab3:
                     st.session_state["tab3_video_path"] = video_output
                     st.success("✅ Video procesado.")
                     st.rerun()
+
+
+# ─────────────────────────────────────────────
+# FUNCIONES CARRUSEL
+# ─────────────────────────────────────────────
+
+def extraer_imagenes_cuerpo(url: str) -> list:
+    """Extrae URLs de imágenes internas del cuerpo de la nota (excluye la imagen principal)."""
+    try:
+        headers = {"User-Agent": "Mozilla/5.0"}
+        resp = requests.get(url, headers=headers, timeout=25)
+        resp.raise_for_status()
+        soup = BeautifulSoup(resp.text, "html.parser")
+        # Buscar imágenes dentro del cuerpo del artículo
+        imagenes = []
+        # Selectores comunes para el cuerpo del artículo
+        cuerpo = (
+            soup.select_one("article")
+            or soup.select_one(".article-body")
+            or soup.select_one(".entry-content")
+            or soup.select_one("main")
+        )
+        if not cuerpo:
+            return []
+        for figure in cuerpo.find_all("figure"):
+            # Intentar srcset primero
+            source = figure.select_one("picture source[srcset]")
+            if source:
+                url_img = parse_srcset_best(source.get("srcset", ""))
+                if url_img:
+                    imagenes.append(mejorar_resolucion_imagen(url_img))
+                    continue
+            img = figure.select_one("img")
+            if img:
+                for attr in ["src", "data-src"]:
+                    val = img.get(attr, "")
+                    if val and val.startswith("http"):
+                        imagenes.append(mejorar_resolucion_imagen(val))
+                        break
+        # Filtrar duplicados y URLs vacías
+        seen = set()
+        result = []
+        for u in imagenes:
+            if u and u not in seen:
+                seen.add(u)
+                result.append(u)
+        return result[:6]  # máximo 6 imágenes del cuerpo
+    except Exception:
+        return []
+
+
+def groq_carrusel_slides(titulo: str, texto: str) -> dict:
+    """Llama a Groq para generar estructura de slides. Devuelve dict con etiqueta y slides."""
+    if not GROQ_KEY:
+        return {
+            "etiqueta": titulo[:20].upper(),
+            "slides": [
+                {"capsula_1_emoji": "📌", "capsula_1_texto": "Información no disponible.", "capsula_2_emoji": "📌", "capsula_2_texto": "Configurar GROQ_KEY."},
+                {"capsula_1_emoji": "📌", "capsula_1_texto": "Información no disponible.", "capsula_2_emoji": "📌", "capsula_2_texto": "Configurar GROQ_KEY."},
+            ]
+        }
+    prompt = (
+        f"Trabajá exclusivamente con el texto de la noticia que te doy. "
+        f"No inventes datos, no agregues contexto, no uses información externa. "
+        f"Devolvé únicamente un objeto JSON válido, sin texto antes ni después, sin bloques de código markdown. "
+        f"La estructura debe ser exactamente esta: "
+        f'{{\"etiqueta\": \"texto corto temático\", \"slides\": [{{\"capsula_1_emoji\": \"emoji\", \"capsula_1_texto\": \"texto\", \"capsula_2_emoji\": \"emoji\", \"capsula_2_texto\": \"texto\"}}, {{\"capsula_1_emoji\": \"emoji\", \"capsula_1_texto\": \"texto\", \"capsula_2_emoji\": \"emoji\", \"capsula_2_texto\": \"texto\"}}]}}. '
+        f"Siempre exactamente 2 objetos en el array de slides. "
+        f"Cada cápsula debe ser una oración corta y directa con un dato relevante de la nota. "
+        f"Cada cápsula debe contener un dato diferente, no repitas información entre cápsulas ni entre slides. "
+        f"El emoji debe ser temáticamente relacionado con el contenido de la cápsula. "
+        f"TEXTO DE LA NOTICIA: {texto}"
+    )
+    try:
+        res = requests.post(
+            "https://api.groq.com/openai/v1/chat/completions",
+            json={"model": "llama-3.3-70b-versatile", "messages": [{"role": "user", "content": prompt}], "temperature": 0.4, "max_tokens": 600},
+            headers={"Authorization": f"Bearer {GROQ_KEY}", "Content-Type": "application/json"},
+            timeout=20,
+        )
+        if res.status_code == 429:
+            return None
+        data = res.json()
+        if "choices" in data:
+            raw = data["choices"][0]["message"]["content"].strip()
+            raw = raw.replace("```json", "").replace("```", "").strip()
+            return json.loads(raw)
+    except Exception:
+        pass
+    return None
+
+
+def groq_carrusel_copy(titulo: str, texto: str, link: str) -> str:
+    """Genera copy breve para el carrusel: título + bajada."""
+    if not GROQ_KEY:
+        return f"{titulo}\n\n👉 {link}"
+    prompt = (
+        f"Trabajá exclusivamente con el título y texto de la noticia que te doy. "
+        f"No inventes datos. "
+        f"Devolvé únicamente un objeto JSON válido, sin texto antes ni después, sin bloques de código markdown. "
+        f'La estructura debe ser exactamente esta: {{\"titulo\": \"una línea\", \"bajada\": \"una línea\"}}. '
+        f"Español argentino directo, sin adjetivos valorativos, sin negritas. "
+        f"El título es una línea corta e impactante. La bajada es una oración que amplía en una línea. "
+        f"TÍTULO: {titulo} TEXTO: {texto}"
+    )
+    try:
+        res = requests.post(
+            "https://api.groq.com/openai/v1/chat/completions",
+            json={"model": "llama-3.3-70b-versatile", "messages": [{"role": "user", "content": prompt}], "temperature": 0.4, "max_tokens": 200},
+            headers={"Authorization": f"Bearer {GROQ_KEY}", "Content-Type": "application/json"},
+            timeout=15,
+        )
+        if res.status_code == 429:
+            return f"{titulo}\n\n👉 {link}"
+        data = res.json()
+        if "choices" in data:
+            raw = data["choices"][0]["message"]["content"].strip()
+            raw = raw.replace("```json", "").replace("```", "").strip()
+            parsed = json.loads(raw)
+            return f"{parsed.get('titulo','')}\n{parsed.get('bajada','')}\n\n👉 Más info en el link de las historias.\n{link}"
+    except Exception:
+        pass
+    return f"{titulo}\n\n👉 {link}"
+
+
+def renderizar_slides(slides_data: list, img_portada: str, logo_white: str, logo_green: str) -> list:
+    """Renderiza todos los slides y devuelve lista de bytes."""
+    rendered = []
+    for i, slide in enumerate(slides_data):
+        tipo = slide.get("tipo")
+
+        if tipo == "portada":
+            html = build_carrusel_capsulas(
+                etiqueta="",
+                capsula_1_emoji="",
+                capsula_1_texto="",
+                capsula_2_emoji="",
+                capsula_2_texto="",
+                image_data=img_portada,
+                logo_data=logo_white,
+                es_ultimo=False,
+            )
+            # Para la portada usamos build_general_a2 que ya existe
+            from render_v2 import build_general_a2
+            html = build_general_a2(
+                title=slide.get("titulo", ""),
+                description="",
+                image_data=img_portada,
+                section_label="",
+                logo_data=logo_white,
+            )
+            rendered.append(html_to_image_bytes(html, 1080, 1350))
+
+        elif tipo == "capsulas":
+            # Determinar si es el último slide de cápsulas (antes del cierre y posible imagen)
+            slides_caps = [s for s in slides_data if s.get("tipo") == "capsulas"]
+            es_ultimo = slide == slides_caps[-1]
+            html = build_carrusel_capsulas(
+                etiqueta=slide.get("etiqueta", ""),
+                capsula_1_emoji=slide.get("capsula_1_emoji", ""),
+                capsula_1_texto=slide.get("capsula_1_texto", ""),
+                capsula_2_emoji=slide.get("capsula_2_emoji", ""),
+                capsula_2_texto=slide.get("capsula_2_texto", ""),
+                image_data=img_portada,
+                logo_data=logo_white,
+                es_ultimo=es_ultimo,
+            )
+            rendered.append(html_to_image_bytes(html, 1080, 1350))
+
+        elif tipo == "imagen":
+            img1 = slide.get("imagen_1", "")
+            img2 = slide.get("imagen_2", "")
+            html = build_carrusel_imagen(img1, img2, logo_white)
+            rendered.append(html_to_image_bytes(html, 1080, 1350))
+
+        elif tipo == "cierre":
+            html = build_carrusel_cierre(img_portada, logo_green)
+            rendered.append(html_to_image_bytes(html, 1080, 1350))
+
+    return rendered
+
+
+def enviar_carrusel_telegram(slides_bytes: list, copy_texto: str):
+    """Envía el carrusel completo como media group a Telegram."""
+    if not slides_bytes:
+        st.error("No hay slides para enviar.")
+        return
+
+    # Sanitizar copy
+    lineas = copy_texto.strip().split("\n")
+    ultima = lineas[-1] if lineas else ""
+    es_link = ultima.startswith("http")
+    if es_link:
+        cuerpo = "\n".join(lineas[:-1])
+        pie = "\n" + ultima
+    else:
+        cuerpo = copy_texto
+        pie = ""
+    cuerpo = cuerpo.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+    limite = 1024 - len(pie)
+    if len(cuerpo) > limite:
+        cuerpo = cuerpo[: limite - 3] + "..."
+    copy_final = cuerpo + pie
+
+    # Telegram acepta máximo 10 fotos por media group
+    media = []
+    files = {}
+    for idx, slide_bytes in enumerate(slides_bytes[:10]):
+        key = f"slide{idx}"
+        if idx == 0:
+            media.append({"type": "photo", "media": f"attach://{key}", "caption": copy_final, "parse_mode": "HTML"})
+        else:
+            media.append({"type": "photo", "media": f"attach://{key}"})
+        files[key] = (f"slide{idx}.jpg", slide_bytes, "image/jpeg")
+
+    try:
+        res = requests.post(
+            f"https://api.telegram.org/bot{TG_TOKEN}/sendMediaGroup",
+            data={"chat_id": TG_CHAT_ID, "media": json.dumps(media)},
+            files=files,
+            timeout=60,
+        )
+        if res.status_code == 200 and res.json().get("ok"):
+            st.success("✅ Carrusel enviado a Telegram.")
+        else:
+            st.error(f"❌ Error Telegram: {res.json().get('description', 'sin detalle')}")
+    except Exception as e:
+        st.error(f"❌ Error: {str(e)}")
+
+
+# ─────────────────────────────────────────────
+# TAB 4 — CARRUSEL
+# ─────────────────────────────────────────────
+with tab4:
+    st.subheader("Generador de carrusel")
+
+    # ── ETAPA 1: ENTRADA ─────────────────────
+    with st.form("carrusel_form"):
+        url_carr = st.text_input("URL de la nota", placeholder="https://el-periodico.com.ar/...")
+        submit_carr = st.form_submit_button("🔄 Procesar nota")
+
+    if submit_carr:
+        if not url_carr.strip():
+            st.error("Pegá una URL.")
+        else:
+            with st.spinner("Scrapeando nota y generando estructura..."):
+                try:
+                    # Scraping
+                    article = fetch_article_data(url_carr.strip())
+                    loop = asyncio.get_event_loop()
+                    texto_noticia = loop.run_until_complete(extraer_texto_noticia(url_carr.strip()))
+                    imagenes_cuerpo = extraer_imagenes_cuerpo(url_carr.strip())
+
+                    # Segunda imagen: primera del cuerpo que no sea la portada
+                    img_portada_url = article.get("image_url", "")
+                    segunda_img_url = ""
+                    for img_url in imagenes_cuerpo:
+                        if img_url != img_portada_url:
+                            segunda_img_url = img_url
+                            break
+
+                    # Groq: slides
+                    groq_result = groq_carrusel_slides(article["title"], texto_noticia)
+                    if not groq_result:
+                        st.error("⚠️ Error al generar slides con Groq. Intentá de nuevo.")
+                        st.stop()
+
+                    # Groq: copy
+                    copy_carr = groq_carrusel_copy(article["title"], texto_noticia, article["url"])
+
+                    # Armar estructura de slides inicial
+                    etiqueta = groq_result.get("etiqueta", "").upper()
+                    slides_groq = groq_result.get("slides", [])
+
+                    slides_iniciales = []
+
+                    # Slide 1: portada
+                    slides_iniciales.append({
+                        "tipo": "portada",
+                        "titulo": article["title"],
+                    })
+
+                    # Slides de cápsulas
+                    for slide in slides_groq:
+                        slides_iniciales.append({
+                            "tipo": "capsulas",
+                            "etiqueta": etiqueta,
+                            "capsula_1_emoji": slide.get("capsula_1_emoji", "📌"),
+                            "capsula_1_texto": slide.get("capsula_1_texto", ""),
+                            "capsula_2_emoji": slide.get("capsula_2_emoji", "📌"),
+                            "capsula_2_texto": slide.get("capsula_2_texto", ""),
+                        })
+
+                    # Slide de imagen (si hay segunda imagen)
+                    if segunda_img_url:
+                        slides_iniciales.append({
+                            "tipo": "imagen",
+                            "imagen_1_url": img_portada_url,
+                            "imagen_2_url": segunda_img_url,
+                            "imagen_1": article["image_data"],
+                            "imagen_2": url_to_base64(segunda_img_url),
+                        })
+
+                    # Slide cierre (siempre último)
+                    slides_iniciales.append({"tipo": "cierre"})
+
+                    # Guardar en session_state
+                    st.session_state["carr_slides"] = slides_iniciales
+                    st.session_state["carr_img_portada"] = article["image_data"]
+                    st.session_state["carr_img_portada_url"] = img_portada_url
+                    st.session_state["carr_article"] = article
+                    st.session_state["carr_copy"] = copy_carr
+                    st.session_state["carr_renders"] = []
+
+                except Exception as e:
+                    st.error(f"Error: {e}")
+                    st.stop()
+
+    # ── ETAPA 2: EDICIÓN DE SLIDES ────────────
+    if "carr_slides" in st.session_state:
+        slides = st.session_state["carr_slides"]
+        img_portada = st.session_state.get("carr_img_portada", "")
+        article = st.session_state.get("carr_article", {})
+
+        st.divider()
+        st.markdown("### ✏️ Revisión de slides")
+
+        slides_a_eliminar = []
+
+        for i, slide in enumerate(slides):
+            tipo = slide.get("tipo")
+            label = {
+                "portada": f"Slide 1 — Portada",
+                "capsulas": f"Slide {i+1} — Cápsulas",
+                "imagen": f"Slide {i+1} — Imagen",
+                "cierre": f"Slide {i+1} — Cierre (fijo)",
+            }.get(tipo, f"Slide {i+1}")
+
+            with st.expander(label, expanded=(tipo not in ["cierre"])):
+
+                if tipo == "portada":
+                    nuevo_titulo = st.text_input(
+                        "Título", value=slide.get("titulo", ""),
+                        key=f"carr_titulo_{i}"
+                    )
+                    slides[i]["titulo"] = nuevo_titulo
+
+                elif tipo == "capsulas":
+                    nueva_etiqueta = st.text_input(
+                        "Etiqueta", value=slide.get("etiqueta", ""),
+                        key=f"carr_etiqueta_{i}"
+                    )
+                    col_e1, col_t1 = st.columns([1, 8])
+                    with col_e1:
+                        e1 = st.text_input("", value=slide.get("capsula_1_emoji", ""), key=f"carr_e1_{i}", label_visibility="collapsed")
+                    with col_t1:
+                        t1 = st.text_area("Cápsula 1", value=slide.get("capsula_1_texto", ""), key=f"carr_t1_{i}", height=80)
+                    col_e2, col_t2 = st.columns([1, 8])
+                    with col_e2:
+                        e2 = st.text_input("", value=slide.get("capsula_2_emoji", ""), key=f"carr_e2_{i}", label_visibility="collapsed")
+                    with col_t2:
+                        t2 = st.text_area("Cápsula 2", value=slide.get("capsula_2_texto", ""), key=f"carr_t2_{i}", height=80)
+                    slides[i]["etiqueta"] = nueva_etiqueta
+                    slides[i]["capsula_1_emoji"] = e1
+                    slides[i]["capsula_1_texto"] = t1
+                    slides[i]["capsula_2_emoji"] = e2
+                    slides[i]["capsula_2_texto"] = t2
+
+                    if st.button("🗑 Eliminar este slide", key=f"carr_del_{i}"):
+                        slides_a_eliminar.append(i)
+
+                elif tipo == "imagen":
+                    st.caption("Imágenes del slide. Podés reemplazar cargando nuevas.")
+                    col_img1, col_img2 = st.columns(2)
+                    with col_img1:
+                        nueva_foto1 = st.file_uploader("Foto superior", type=["jpg","jpeg","png","webp"], key=f"carr_img1_{i}")
+                        if nueva_foto1:
+                            slides[i]["imagen_1"] = f"data:{nueva_foto1.type};base64,{base64.b64encode(nueva_foto1.read()).decode()}"
+                    with col_img2:
+                        nueva_foto2 = st.file_uploader("Foto inferior (opcional)", type=["jpg","jpeg","png","webp"], key=f"carr_img2_{i}")
+                        if nueva_foto2:
+                            slides[i]["imagen_2"] = f"data:{nueva_foto2.type};base64,{base64.b64encode(nueva_foto2.read()).decode()}"
+
+                    if st.button("🗑 Eliminar este slide", key=f"carr_del_img_{i}"):
+                        slides_a_eliminar.append(i)
+
+                elif tipo == "cierre":
+                    st.caption("Slide fijo. No editable.")
+
+        # Aplicar eliminaciones
+        if slides_a_eliminar:
+            st.session_state["carr_slides"] = [s for idx, s in enumerate(slides) if idx not in slides_a_eliminar]
+            st.rerun()
+
+        # Botón agregar slide (inserta en penúltimo lugar, antes del cierre)
+        st.divider()
+        col_add1, col_add2 = st.columns(2)
+        with col_add1:
+            if st.button("➕ Agregar slide de cápsulas"):
+                nuevo = {
+                    "tipo": "capsulas",
+                    "etiqueta": st.session_state["carr_slides"][1].get("etiqueta", "") if len(st.session_state["carr_slides"]) > 1 else "",
+                    "capsula_1_emoji": "📌",
+                    "capsula_1_texto": "",
+                    "capsula_2_emoji": "📌",
+                    "capsula_2_texto": "",
+                }
+                st.session_state["carr_slides"].insert(-1, nuevo)
+                st.rerun()
+        with col_add2:
+            if st.button("➕ Agregar slide de imagen"):
+                nuevo = {
+                    "tipo": "imagen",
+                    "imagen_1": "",
+                    "imagen_2": "",
+                }
+                st.session_state["carr_slides"].insert(-1, nuevo)
+                st.rerun()
+
+        # ── ETAPA 3: RENDER Y ENVÍO ───────────
+        st.divider()
+        st.markdown("### 🎨 Generar y enviar")
+
+        if st.button("🖼 Generar carrusel"):
+            logo_white = file_to_base64("logo_white.png")
+            logo_green = file_to_base64("logo.png")
+            with st.spinner("Renderizando slides..."):
+                renders = renderizar_slides(
+                    st.session_state["carr_slides"],
+                    img_portada,
+                    logo_white,
+                    logo_green,
+                )
+            st.session_state["carr_renders"] = renders
+            st.rerun()
+
+        if st.session_state.get("carr_renders"):
+            renders = st.session_state["carr_renders"]
+            st.markdown(f"**{len(renders)} slides generados**")
+
+            # Preview en grilla
+            cols = st.columns(min(len(renders), 4))
+            for idx, render_bytes in enumerate(renders):
+                with cols[idx % 4]:
+                    st.image(render_bytes, use_container_width=True)
+                    st.download_button(
+                        f"⬇ Slide {idx+1}",
+                        data=render_bytes,
+                        file_name=f"carrusel_slide_{idx+1}.jpg",
+                        mime="image/jpeg",
+                        key=f"dl_slide_{idx}"
+                    )
+
+            st.divider()
+            copy_carr_edit = st.text_area(
+                "Copy para Telegram (editable)",
+                value=st.session_state.get("carr_copy", ""),
+                height=150,
+                key="copy_carr_final"
+            )
+
+            if st.button("📤 Enviar carrusel a Telegram"):
+                enviar_carrusel_telegram(renders, copy_carr_edit)

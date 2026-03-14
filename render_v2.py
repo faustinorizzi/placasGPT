@@ -1,4 +1,4 @@
-RENDER_VERSION = "V2-2026-03-11-FIXED-14-3I"
+RENDER_VERSION = "V2-2026-03-14-CARRUSEL-01"
 
 def safe_bg_style(
     image_data: str,
@@ -1120,6 +1120,333 @@ def build_story_html(
         <div class="panel">
           <h1 class="titulo">{title}</h1>
           {logo_green}
+        </div>
+      </body>
+    </html>
+    """
+
+
+# =========================================================
+# CARRUSEL — Slide de cápsulas
+# =========================================================
+def build_carrusel_capsulas(
+    etiqueta: str,
+    capsula_1_emoji: str,
+    capsula_1_texto: str,
+    capsula_2_emoji: str,
+    capsula_2_texto: str,
+    image_data: str,
+    logo_data: str,
+    es_ultimo: bool = False,
+) -> str:
+    photo_style = (
+        f"background-image: url('{image_data}');"
+        if image_data
+        else "background: #0d1f10;"
+    )
+    flecha = "" if es_ultimo else """
+        <div class="flecha">&#8594;</div>
+    """
+
+    return f"""
+    <html>
+      <head>
+        <meta charset="utf-8">
+        {global_styles()}
+        <style>
+          .cap-canvas {{
+            width: 1080px;
+            height: 1350px;
+            position: relative;
+            overflow: hidden;
+          }}
+
+          .cap-foto {{
+            position: absolute;
+            inset: 0;
+            {photo_style}
+            background-size: cover;
+            background-position: center;
+          }}
+
+          .cap-overlay {{
+            position: absolute;
+            inset: 0;
+            background: rgba(13, 31, 16, 0.80);
+            z-index: 2;
+          }}
+
+          .cap-etiqueta {{
+            position: absolute;
+            top: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #34693A;
+            color: #fff;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 34px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            padding: 14px 44px 12px 44px;
+            border-radius: 50px;
+            white-space: nowrap;
+            z-index: 10;
+          }}
+
+          .cap-contenido {{
+            position: absolute;
+            top: 220px;
+            left: 108px;
+            right: 108px;
+            bottom: 130px;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 60px;
+          }}
+
+          .cap-item {{
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 46px;
+            font-weight: 400;
+            line-height: 1.15;
+            color: #fff;
+          }}
+
+          .cap-emoji {{
+            font-size: 48px;
+            margin-right: 10px;
+            vertical-align: middle;
+          }}
+
+          .flecha {{
+            position: absolute;
+            right: 60px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 80px;
+            color: #fff;
+            z-index: 10;
+            line-height: 1;
+          }}
+
+          .brand-logo {{
+            bottom: 50px;
+            filter: brightness(0) invert(1);
+          }}
+        </style>
+      </head>
+      <body>
+        <div class="cap-canvas">
+          <div class="cap-foto"></div>
+          <div class="cap-overlay"></div>
+          <div class="cap-etiqueta">{etiqueta}</div>
+          <div class="cap-contenido">
+            <div class="cap-item">
+              <span class="cap-emoji">{capsula_1_emoji}</span>{capsula_1_texto}
+            </div>
+            <div class="cap-item">
+              <span class="cap-emoji">{capsula_2_emoji}</span>{capsula_2_texto}
+            </div>
+          </div>
+          {flecha}
+          {logo_html(logo_data)}
+        </div>
+      </body>
+    </html>
+    """
+
+
+# =========================================================
+# CARRUSEL — Slide de imagen sola
+# =========================================================
+def build_carrusel_imagen(
+    image_data_1: str,
+    image_data_2: str,
+    logo_data: str,
+) -> str:
+    """
+    Una imagen: ocupa todo el canvas.
+    Dos imágenes: mitad superior / mitad inferior, logo en el borde.
+    """
+    if image_data_1 and image_data_2:
+        return f"""
+    <html>
+      <head>
+        <meta charset="utf-8">
+        {global_styles()}
+        <style>
+          .img-canvas {{
+            width: 1080px;
+            height: 1350px;
+            position: relative;
+            overflow: hidden;
+            background: #000;
+          }}
+
+          .img-top {{
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 675px;
+            background-image: url('{image_data_1}');
+            background-size: cover;
+            background-position: center top;
+          }}
+
+          .img-bottom {{
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 675px;
+            background-image: url('{image_data_2}');
+            background-size: cover;
+            background-position: center bottom;
+          }}
+
+          .brand-logo {{
+            bottom: 650px;
+            filter: brightness(0) invert(1);
+            z-index: 20;
+          }}
+        </style>
+      </head>
+      <body>
+        <div class="img-canvas">
+          <div class="img-top"></div>
+          <div class="img-bottom"></div>
+          {logo_html(logo_data)}
+        </div>
+      </body>
+    </html>
+    """
+    else:
+        img = image_data_1 or image_data_2
+        photo_style = f"background-image: url('{img}');" if img else "background: #0d1f10;"
+        return f"""
+    <html>
+      <head>
+        <meta charset="utf-8">
+        {global_styles()}
+        <style>
+          .img-canvas {{
+            width: 1080px;
+            height: 1350px;
+            position: relative;
+            overflow: hidden;
+          }}
+
+          .img-full {{
+            position: absolute;
+            inset: 0;
+            {photo_style}
+            background-size: cover;
+            background-position: center;
+          }}
+
+          .brand-logo {{
+            bottom: 50px;
+            filter: brightness(0) invert(1);
+          }}
+        </style>
+      </head>
+      <body>
+        <div class="img-canvas">
+          <div class="img-full"></div>
+          {logo_html(logo_data)}
+        </div>
+      </body>
+    </html>
+    """
+
+
+# =========================================================
+# CARRUSEL — Slide de cierre (fijo)
+# =========================================================
+def build_carrusel_cierre(
+    image_data: str,
+    logo_green_data: str,
+) -> str:
+    photo_style = (
+        f"background-image: url('{image_data}');"
+        if image_data
+        else "background: #0d1f10;"
+    )
+
+    return f"""
+    <html>
+      <head>
+        <meta charset="utf-8">
+        {global_styles()}
+        <style>
+          .cierre-canvas {{
+            width: 1080px;
+            height: 1350px;
+            position: relative;
+            overflow: hidden;
+          }}
+
+          .cierre-foto {{
+            position: absolute;
+            inset: 0;
+            {photo_style}
+            background-size: cover;
+            background-position: center;
+          }}
+
+          .cierre-overlay {{
+            position: absolute;
+            inset: 0;
+            background: rgba(52, 105, 58, 0.78);
+            z-index: 2;
+          }}
+
+          .cierre-contenido {{
+            position: absolute;
+            inset: 0;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 28px;
+          }}
+
+          .cierre-logo {{
+            width: 300px;
+            height: auto;
+          }}
+
+          .cierre-url {{
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 36px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #fff;
+          }}
+
+          .cierre-icono {{
+            width: 80px;
+            height: 80px;
+            background: #000;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+          }}
+        </style>
+      </head>
+      <body>
+        <div class="cierre-canvas">
+          <div class="cierre-foto"></div>
+          <div class="cierre-overlay"></div>
+          <div class="cierre-contenido">
+            <img src="{logo_green_data}" alt="El Periódico" class="cierre-logo" />
+            <div class="cierre-url">el-periodico.com.ar</div>
+            <div class="cierre-icono">🌐</div>
+          </div>
         </div>
       </body>
     </html>
