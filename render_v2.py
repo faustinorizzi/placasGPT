@@ -787,7 +787,7 @@ def build_policiales(title, description, image_data, section_label, logo_data):
     photo_style = (
         f"background-image: url('{image_data}');"
         if image_data
-        else "background: linear-gradient(135deg, #171717 0%, #080808 100%);"
+        else "background: linear-gradient(135deg, #1a1a1a 0%, #333 100%);"
     )
 
     return f"""
@@ -797,73 +797,91 @@ def build_policiales(title, description, image_data, section_label, logo_data):
         {global_styles()}
         <style>
           .pol {{
-            background: #16295F;
+            background: #111;
           }}
 
           .photo {{
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 740px;
+            inset: 0;
             {photo_style}
             background-size: cover;
             background-position: center;
           }}
 
-          .divider {{
+          .gradient {{
             position: absolute;
-            top: 740px;
-            left: 0;
-            right: 0;
-            height: 20px;
-            background: #263E8C;
-            z-index: 5;
+            inset: 0;
+            background: linear-gradient(
+              to bottom,
+              rgba(0,0,0,0) 0%,
+              rgba(0,0,0,0) 35%,
+              rgba(0,0,0,0.55) 60%,
+              rgba(0,0,0,0.88) 100%
+            );
+            z-index: 2;
           }}
 
-          .panel {{
+          .franja-superior {{
             position: absolute;
             left: 0;
-            right: 0;
+            top: 0;
+            width: 35px;
+            bottom: 40%;
+            background: rgba(255,255,255,0.35);
+            z-index: 3;
+          }}
+
+          .franja-inferior {{
+            position: absolute;
+            left: 0;
             bottom: 0;
-            height: 590px;
-            background: #16295F;
-            padding: 54px 108px 110px 108px;
+            width: 35px;
+            height: 40%;
+            background: #2B2B2B;
+            z-index: 3;
+          }}
+
+          .content {{
+            position: absolute;
+            left: 108px;
+            right: 108px;
+            bottom: 120px;
+            z-index: 10;
           }}
 
           .section-label {{
-            color: rgba(255,255,255,0.82);
+            color: rgba(255,255,255,0.7);
             margin-bottom: 18px;
           }}
 
           .title {{
             font-family: 'Passion One', cursive;
             font-size: {font_size}px;
-            line-height: 1.00;
+            line-height: 0.97;
             color: #fff;
-            max-width: 864px;
           }}
 
           .brand-logo {{
-            width: 220px;
-            bottom: 38px;
+            bottom: 50px;
+            filter: brightness(0) invert(1);
           }}
         </style>
       </head>
       <body>
         <div class="canvas pol">
           <div class="photo"></div>
-          <div class="divider"></div>
-          <div class="panel">
+          <div class="gradient"></div>
+          <div class="franja-superior"></div>
+          <div class="franja-inferior"></div>
+          <div class="content">
             <div class="section-label">{section_label}</div>
             <h1 class="title">{title}</h1>
-            {logo_html(logo_data)}
           </div>
+          {logo_html(logo_data)}
         </div>
       </body>
     </html>
     """
-
 
 # =========================================================
 # STORY — Historia 9:16 (1080×1920)
