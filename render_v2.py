@@ -1,4 +1,4 @@
-RENDER_VERSION = "V2-2026-03-11-FIXED-14-3H"
+RENDER_VERSION = "V2-2026-03-11-FIXED-14-3I"
 
 def safe_bg_style(
     image_data: str,
@@ -920,7 +920,7 @@ def build_story_html(
 
     # ── DEPORTES ──────────────────────────────────────────────
     if family in ("deportes_a", "deportes_b"):
-        font_size_story = 52 if len(title) > 100 else 62
+        font_size_story = 56 if len(title) > 100 else 64
         words = title.upper().split()
         if len(words) >= 4:
             title_html = (
@@ -1007,7 +1007,7 @@ def build_story_html(
 
     # ── POLICIALES ────────────────────────────────────────────
     if family == "policiales":
-        font_size_story = 52 if len(title) > 100 else 62
+        font_size_story = 56 if len(title) > 100 else 64
         return f"""
     <html>
       <head>
@@ -1076,7 +1076,7 @@ def build_story_html(
 
     # ── ESPECTÁCULOS ──────────────────────────────────────────
     if family in ("espectaculos_a", "espectaculos_b"):
-        font_size_story = 52 if len(title) > 100 else 62
+        font_size_story = 56 if len(title) > 100 else 64
         return f"""
     <html>
       <head>
@@ -1144,7 +1144,7 @@ def build_story_html(
     """
 
     # ── GENERAL (fallback) ────────────────────────────────────
-    font_size_story = 52 if len(title) > 100 else 62
+    font_size_story = 56 if len(title) > 100 else 64
     return f"""
     <html>
       <head>
