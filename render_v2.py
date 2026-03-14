@@ -198,7 +198,7 @@ def build_general_a(title, description, image_data, section_label, logo_data):
           .franja-inferior {{
             position: absolute;
             left: 0;
-            bottom: 50%;
+            bottom: 0;
             width: 35px;
             height: 50%;
             background: #34693A;
