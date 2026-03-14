@@ -1,4 +1,4 @@
-RENDER_VERSION = "V2-2026-03-11-FIXED-14-3"
+RENDER_VERSION = "V2-2026-03-11-FIXED-14-3b"
 
 
 def safe_bg_style(
@@ -189,8 +189,8 @@ def build_general_a(title, description, image_data, section_label, logo_data):
             position: absolute;
             left: 0;
             top: 0;
-            width: 20px;
-            bottom: 320px;
+            width: 30px;
+            bottom: 260px;
             background: rgba(255,255,255,0.35);
             z-index: 3;
           }}
@@ -199,8 +199,8 @@ def build_general_a(title, description, image_data, section_label, logo_data):
             position: absolute;
             left: 0;
             bottom: 0;
-            width: 20px;
-            height: 320px;
+            width: 30px;
+            height: 260px;
             background: #34693A;
             z-index: 3;
           }}
