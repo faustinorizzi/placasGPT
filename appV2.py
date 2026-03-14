@@ -15,7 +15,7 @@ import uuid
 import feedparser
 
 from rules_v2 import infer_section_from_url, choose_family, display_section_label
-from render_v2 import build_post_html, build_story_html, RENDER_VERSION, build_carrusel_capsulas, build_carrusel_imagen, build_carrusel_cierre
+from render_v2 import build_post_html, build_story_html, RENDER_VERSION, build_carrusel_capsulas, build_carrusel_imagen, build_carrusel_cierre, build_carrusel_portada
 
 
 st.set_page_config(page_title="El Periódico — Panel V2", layout="wide")
@@ -1075,23 +1075,9 @@ def renderizar_slides(slides_data: list, img_portada: str, logo_white: str, logo
         tipo = slide.get("tipo")
 
         if tipo == "portada":
-            html = build_carrusel_capsulas(
-                etiqueta="",
-                capsula_1_emoji="",
-                capsula_1_texto="",
-                capsula_2_emoji="",
-                capsula_2_texto="",
-                image_data=img_portada,
-                logo_data=logo_white,
-                es_ultimo=False,
-            )
-            # Para la portada usamos build_general_a2 que ya existe
-            from render_v2 import build_general_a2
-            html = build_general_a2(
+            html = build_carrusel_portada(
                 title=slide.get("titulo", ""),
-                description="",
                 image_data=img_portada,
-                section_label="",
                 logo_data=logo_white,
             )
             rendered.append(html_to_image_bytes(html, 1080, 1350))

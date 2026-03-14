@@ -1451,3 +1451,110 @@ def build_carrusel_cierre(
       </body>
     </html>
     """
+
+
+# =========================================================
+# CARRUSEL — Portada
+# =========================================================
+def build_carrusel_portada(
+    title: str,
+    image_data: str,
+    logo_data: str,
+) -> str:
+    font_size = 60 if len(title) > 100 else 72
+    photo_style = (
+        f"background-image: url('{image_data}');"
+        if image_data
+        else "background: linear-gradient(135deg, #0d1f10 0%, #1a3d1e 100%);"
+    )
+
+    return f"""
+    <html>
+      <head>
+        <meta charset="utf-8">
+        {global_styles()}
+        <style>
+          .port-canvas {{
+            width: 1080px;
+            height: 1350px;
+            position: relative;
+            overflow: hidden;
+            background: #0d1f10;
+          }}
+
+          .port-foto {{
+            position: absolute;
+            inset: 0;
+            {photo_style}
+            background-size: cover;
+            background-position: center;
+          }}
+
+          .port-title-box {{
+            position: absolute;
+            bottom: 220px;
+            left: 108px;
+            right: 108px;
+            background: rgba(13, 52, 16, 0.92);
+            padding: 60px;
+            z-index: 20;
+          }}
+
+          .port-titulo {{
+            font-family: 'Passion One', cursive;
+            font-size: {font_size}px;
+            font-weight: 400;
+            line-height: 0.97;
+            color: #fff;
+          }}
+
+          .port-swipe {{
+            position: absolute;
+            bottom: 80px;
+            right: 108px;
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            opacity: 0.6;
+          }}
+
+          .port-swipe-txt {{
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 28px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #fff;
+          }}
+
+          .port-swipe-arrow {{
+            font-size: 36px;
+            color: #fff;
+            line-height: 1;
+          }}
+
+          .brand-logo {{
+            bottom: 68px;
+            left: 108px;
+            right: auto;
+            transform: none;
+            filter: brightness(0) invert(1);
+          }}
+        </style>
+      </head>
+      <body>
+        <div class="port-canvas">
+          <div class="port-foto"></div>
+          <div class="port-title-box">
+            <h1 class="port-titulo">{title}</h1>
+          </div>
+          <div class="port-swipe">
+            <span class="port-swipe-txt">deslizá</span>
+            <span class="port-swipe-arrow">&#8594;</span>
+          </div>
+          {logo_html(logo_data)}
+        </div>
+      </body>
+    </html>
+    """
