@@ -1,4 +1,4 @@
-RENDER_VERSION = "V2-2026-03-11-FIXED-14-3F"
+RENDER_VERSION = "V2-2026-03-11-FIXED-14-3H"
 
 
 def safe_bg_style(
@@ -892,7 +892,7 @@ STORY_ACCENT_COLORS = {
     "deportes_b":     "#6DB33F",
     "espectaculos_a": "#5B2346",
     "espectaculos_b": "#5B2346",
-    "policiales":     "#263E8C",
+    "policiales":     "#777777",
     "general_a1":     "#34693A",
     "general_a2":     "#34693A",
     "general_b":      "#34693A",
@@ -1032,7 +1032,7 @@ def build_story_html(
             top: 67%;
             left: 0; right: 0;
             height: 20px;
-            background: #263E8C;
+            background: #777777;
             z-index: 5;
           }}
 
@@ -1040,7 +1040,7 @@ def build_story_html(
             position: absolute;
             top: calc(67% + 20px);
             left: 0; right: 0; bottom: 0;
-            background: #16295F;
+            background: #2B2B2B;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
