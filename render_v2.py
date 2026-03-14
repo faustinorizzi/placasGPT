@@ -190,7 +190,7 @@ def build_general_a(title, description, image_data, section_label, logo_data):
             left: 0;
             top: 0;
             width: 35px;
-            bottom: 60%;
+            bottom: 40%;
             background: rgba(255,255,255,0.35);
             z-index: 3;
           }}
