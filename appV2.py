@@ -15,7 +15,7 @@ import uuid
 import feedparser
 
 from rules_v2 import infer_section_from_url, choose_family, display_section_label
-from render_v2 import build_post_html, build_story_html, RENDER_VERSION, build_carrusel_capsulas, build_carrusel_imagen, build_carrusel_cierre, build_carrusel_portada
+from render_v2 import build_post_html, build_story_html, RENDER_VERSION, build_carrusel_capsulas, build_carrusel_imagen, build_carrusel_cierre, build_carrusel_portada, build_carrusel_portada
 
 
 st.set_page_config(page_title="El Periódico — Panel V2", layout="wide")
