@@ -1,4 +1,4 @@
-RENDER_VERSION = "V2-2026-03-14-CARRUSEL-03"
+RENDER_VERSION = "V2-2026-03-14-CARRUSEL-04"
 
 def safe_bg_style(
     image_data: str,
@@ -1312,7 +1312,7 @@ def build_carrusel_capsulas(
 
           .flecha {{
             position: absolute;
-            right: 52px;
+            right: -10px;
             top: 50%;
             transform: translateY(-50%);
             font-size: 80px;
@@ -1487,7 +1487,7 @@ def build_carrusel_cierre(
           .cierre-overlay {{
             position: absolute;
             inset: 0;
-            background: rgba(52, 105, 58, 0.78);
+            background: rgba(13, 31, 16, 0.82);
             z-index: 2;
           }}
 
@@ -1499,17 +1499,17 @@ def build_carrusel_cierre(
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 28px;
+            gap: 40px;
           }}
 
           .cierre-logo {{
-            width: 320px;
+            width: 380px;
             height: auto;
           }}
 
           .cierre-url {{
             font-family: 'Barlow Condensed', sans-serif;
-            font-size: 44px;
+            font-size: 52px;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 2px;
@@ -1517,8 +1517,8 @@ def build_carrusel_cierre(
           }}
 
           .cierre-icono {{
-            width: 100px;
-            height: 100px;
+            width: 130px;
+            height: 130px;
           }}
         </style>
       </head>
