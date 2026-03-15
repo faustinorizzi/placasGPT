@@ -1,4 +1,4 @@
-RENDER_VERSION = "V2-2026-03-14-CARRUSEL-02"
+RENDER_VERSION = "V2-2026-03-14-CARRUSEL-03"
 
 def safe_bg_style(
     image_data: str,
@@ -1133,12 +1133,14 @@ def build_carrusel_portada(
     title: str,
     image_data: str,
     logo_data: str,
+    swipe_data: str = "",
 ) -> str:
     photo_style = (
         f"background-image: linear-gradient(to bottom, rgba(0,0,0,.06), rgba(0,0,0,.22)), url('{image_data}');"
         if image_data
         else "background: linear-gradient(135deg, #0d1f10 0%, #1a3d1f 100%);"
     )
+    swipe_html = f'<img src="{swipe_data}" alt="" class="port-swipe" />' if swipe_data else ""
 
     return f"""
     <html>
@@ -1163,8 +1165,8 @@ def build_carrusel_portada(
             width: 864px;
             background: #34693A;
             color: #fff;
-            padding: 60px;
-            box-shadow: 0 8px 40px rgba(0,0,0,0.7), 0 2px 8px rgba(0,0,0,0.5);
+            padding: 50px 60px;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.55), 0 2px 8px rgba(0,0,0,0.35);
             z-index: 20;
           }}
 
@@ -1178,12 +1180,12 @@ def build_carrusel_portada(
 
           .port-swipe {{
             position: absolute;
-            right: 60px;
-            bottom: 30%;
-            width: 80px;
+            right: 52px;
+            bottom: 28%;
+            width: 90px;
             height: auto;
             z-index: 30;
-            opacity: 0.9;
+            opacity: 0.92;
           }}
 
           .brand-logo {{
@@ -1197,7 +1199,7 @@ def build_carrusel_portada(
           <div class="port-title-box">
             <h1 class="port-title">{title}</h1>
           </div>
-          <img src="swipe.svg" alt="" class="port-swipe" />
+          {swipe_html}
           {logo_html(logo_data)}
         </div>
       </body>
@@ -1453,6 +1455,7 @@ def build_carrusel_imagen(
 def build_carrusel_cierre(
     image_data: str,
     logo_green_data: str,
+    phone_data: str = "",
 ) -> str:
     photo_style = (
         f"background-image: url('{image_data}');"
@@ -1526,7 +1529,7 @@ def build_carrusel_cierre(
           <div class="cierre-contenido">
             <img src="{logo_green_data}" alt="El Periódico" class="cierre-logo" />
             <div class="cierre-url">el-periodico.com.ar</div>
-            <img src="phone.svg" alt="" class="cierre-icono" />
+            {f'<img src="{phone_data}" alt="" class="cierre-icono" />' if phone_data else ""}
           </div>
         </div>
       </body>

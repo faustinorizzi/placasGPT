@@ -54,6 +54,8 @@ def file_to_base64(path: str) -> str:
         mime = "image/jpeg"
     elif p.suffix.lower() == ".webp":
         mime = "image/webp"
+    elif p.suffix.lower() == ".svg":
+        mime = "image/svg+xml"
     return f"data:{mime};base64,{base64.b64encode(p.read_bytes()).decode()}"
 
 
@@ -1070,6 +1072,8 @@ def groq_carrusel_copy(titulo: str, texto: str, link: str) -> str:
 
 def renderizar_slides(slides_data: list, img_portada: str, logo_white: str, logo_green: str) -> list:
     """Renderiza todos los slides y devuelve lista de bytes."""
+    swipe_data = file_to_base64("swipe.svg")
+    phone_data = file_to_base64("phone.svg")
     rendered = []
     for i, slide in enumerate(slides_data):
         tipo = slide.get("tipo")
@@ -1079,11 +1083,11 @@ def renderizar_slides(slides_data: list, img_portada: str, logo_white: str, logo
                 title=slide.get("titulo", ""),
                 image_data=img_portada,
                 logo_data=logo_white,
+                swipe_data=swipe_data,
             )
             rendered.append(html_to_image_bytes(html, 1080, 1350))
 
         elif tipo == "capsulas":
-            # Determinar si es el último slide de cápsulas (antes del cierre y posible imagen)
             slides_caps = [s for s in slides_data if s.get("tipo") == "capsulas"]
             es_ultimo = slide == slides_caps[-1]
             html = build_carrusel_capsulas(
@@ -1105,7 +1109,7 @@ def renderizar_slides(slides_data: list, img_portada: str, logo_white: str, logo
             rendered.append(html_to_image_bytes(html, 1080, 1350))
 
         elif tipo == "cierre":
-            html = build_carrusel_cierre(img_portada, logo_green)
+            html = build_carrusel_cierre(img_portada, logo_green, phone_data=phone_data)
             rendered.append(html_to_image_bytes(html, 1080, 1350))
 
     return rendered
