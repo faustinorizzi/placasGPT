@@ -1,4 +1,4 @@
-RENDER_VERSION = "V2-2026-03-14-CARRUSEL-04"
+RENDER_VERSION = "V2-2026-03-14-CARRUSEL-06"
 
 def safe_bg_style(
     image_data: str,
@@ -1181,25 +1181,34 @@ def build_carrusel_portada(
           .port-swipe {{
             position: absolute;
             right: 52px;
-            bottom: 28%;
+            top: 30%;
             width: 90px;
             height: auto;
             z-index: 30;
             opacity: 0.92;
+            filter: drop-shadow(0 2px 8px rgba(0,0,0,0.7));
           }}
-
+          .port-fade-bottom {{
+            position: absolute;
+            left: 0; right: 0; bottom: 0;
+            height: 280px;
+            background: linear-gradient(to top, rgba(0,0,0,0.60) 0%, transparent 100%);
+            z-index: 5;
+          }}
           .brand-logo {{
             bottom: 50px;
             filter: brightness(0) invert(1);
+            z-index: 10;
           }}
         </style>
       </head>
       <body>
-        <div class="port-canvas">
+       <div class="port-canvas">
           <div class="port-title-box">
             <h1 class="port-title">{title}</h1>
           </div>
           {swipe_html}
+          <div class="port-fade-bottom"></div>
           {logo_html(logo_data)}
         </div>
       </body>
