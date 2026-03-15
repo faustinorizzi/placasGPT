@@ -1,4 +1,4 @@
-RENDER_VERSION = "V2-2026-03-14-CARRUSEL-01"
+RENDER_VERSION = "V2-2026-03-14-CARRUSEL-02"
 
 def safe_bg_style(
     image_data: str,
